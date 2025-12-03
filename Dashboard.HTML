@@ -1024,7 +1024,7 @@
             setTimeout(() => {
                 createLineChart('sbsleoChart', [
                     { name: 'SBSLeo Score', class: 'diff', data: sbsleoScores, unit: '', delay: 0 }
-                ], 0, 35);
+                ], -20, 35);
             }, 200);
 
             // Win Rate Difference Chart
@@ -1033,7 +1033,7 @@
                     { name: 'Fidelity Diff', class: 'clippy', data: fidelityDiff, unit: '%', delay: 0 },
                     { name: 'Aesthetics Diff', class: 'gamma', data: aestheticsDiff, unit: '%', delay: 300 },
                     { name: 'Consistency Diff', class: 'consistency', data: consistencyDiff, unit: '%', delay: 600 }
-                ], 0, 75);
+                ], -50, 80);
             }, 500);
 
             // Weekly SBSLeo Score Chart
@@ -1049,7 +1049,7 @@
                     { name: 'Fidelity Diff', class: 'clippy', data: weeklyFidelityDiff, unit: '%', delay: 0 },
                     { name: 'Aesthetics Diff', class: 'gamma', data: weeklyAestheticsDiff, unit: '%', delay: 300 },
                     { name: 'Consistency Diff', class: 'consistency', data: weeklyConsistencyDiff, unit: '%', delay: 600 }
-                ], 0, 60, weeklyDates);
+                ], -10, 60, weeklyDates);
             }, 1100);
         });
     </script>
