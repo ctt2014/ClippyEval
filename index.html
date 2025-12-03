@@ -324,6 +324,7 @@
                         <span>11/27</span>
                         <span>11/28</span>
                         <span>12/1</span>
+                        <span>12/2</span>
                     </div>
                 </div>
                 <div class="chart-legend">
@@ -354,6 +355,7 @@
                         <span>11/27</span>
                         <span>11/28</span>
                         <span>12/1</span>
+                        <span>12/2</span>
                     </div>
                 </div>
                 <div class="chart-legend">
@@ -743,6 +745,31 @@
                         <td>60.7%</td>
                         <td class="highlight-best">53.8%</td>
                     </tr>
+                    <!-- 12/2 -->
+                    <tr>
+                        <td rowspan="3" class="metric-name">12/2</td>
+                        <td rowspan="3">23.13</td>
+                        <td rowspan="3">25</td>
+                        <td class="metric-name">Fidelity</td>
+                        <td>64.0%</td>
+                        <td>28.0%</td>
+                        <td>8.0%</td>
+                        <td>36.0%</td>
+                    </tr>
+                    <tr>
+                        <td class="metric-name">Aesthetics</td>
+                        <td>60.0%</td>
+                        <td>36.0%</td>
+                        <td>4.0%</td>
+                        <td>24.0%</td>
+                    </tr>
+                    <tr>
+                        <td class="metric-name">Consistency</td>
+                        <td>24.0%</td>
+                        <td>28.0%</td>
+                        <td>48.0%</td>
+                        <td>-4.0%</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -846,13 +873,13 @@
 
     <script>
         // Data for charts
-        const dates = ['11/12', '11/13', '11/14', '11/17', '11/19', '11/20', '11/24', '11/25', '11/26', '11/27', '11/28', '12/1'];
-        const sbsleoScores = [-16.76, 25.43, 20.20, -8.31, 20.43, 19.59, 9.19, 31.33, 6.77, 26.82, 18.69, 24.99];
+        const dates = ['11/12', '11/13', '11/14', '11/17', '11/19', '11/20', '11/24', '11/25', '11/26', '11/27', '11/28', '12/1', '12/2'];
+        const sbsleoScores = [-16.76, 25.43, 20.20, -8.31, 20.43, 19.59, 9.19, 31.33, 6.77, 26.82, 18.69, 24.99, 23.13];
         
         // Win rate differences
-        const fidelityDiff = [-15.3, 71.4, 40.0, 37.5, 62.0, 42.9, 0.0, 44.0, 3.9, 51.9, 25.0, 30.8];
-        const aestheticsDiff = [0.0, 14.2, 40.0, -25.0, 33.4, 28.6, 21.8, 52.0, 30.8, 33.4, 17.8, 30.8];
-        const consistencyDiff = [-38.5, 0.0, 20.0, -37.5, -14.3, -9.5, -4.3, 12.0, -27.0, 3.7, 10.7, 53.8];
+        const fidelityDiff = [-15.3, 71.4, 40.0, 37.5, 62.0, 42.9, 0.0, 44.0, 3.9, 51.9, 25.0, 30.8, 36.0];
+        const aestheticsDiff = [0.0, 14.2, 40.0, -25.0, 33.4, 28.6, 21.8, 52.0, 30.8, 33.4, 17.8, 30.8, 24.0];
+        const consistencyDiff = [-38.5, 0.0, 20.0, -37.5, -14.3, -9.5, -4.3, 12.0, -27.0, 3.7, 10.7, 53.8, -4.0];
 
         // Weekly data (11/16, 11/23, and 11/30)
         const weeklyDates = ['11/16', '11/23', '11/30'];
