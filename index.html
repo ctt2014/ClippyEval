@@ -901,23 +901,48 @@
             }, 1100);
         });
 
-        // Auto-calculate Win Rate Diff
+        // Auto-calculate Win Rate Diff and validate percentages
         function calculateDiff(dimension) {
             const clippy = parseFloat(document.getElementById(`${dimension}Clippy`).value) || 0;
             const gamma = parseFloat(document.getElementById(`${dimension}Gamma`).value) || 0;
+            const tie = parseFloat(document.getElementById(`${dimension}Tie`).value) || 0;
             const diff = clippy - gamma;
             document.getElementById(`${dimension}Diff`).value = diff.toFixed(1);
+            
+            // Validate that sum equals 100%
+            const sum = clippy + gamma + tie;
+            const input = document.getElementById(`${dimension}Clippy`);
+            if (Math.abs(sum - 100) > 0.1 && clippy > 0 && gamma > 0 && tie > 0) {
+                input.setCustomValidity(`${dimension.charAt(0).toUpperCase() + dimension.slice(1)}: Clippy + Gamma + Tie must equal 100% (current: ${sum.toFixed(1)}%)`);
+            } else {
+                input.setCustomValidity('');
+            }
         }
 
-        // Add event listeners for auto-calculation
+        // Add event listeners for auto-calculation and validation
         ['fidelity', 'aesthetics', 'consistency'].forEach(dimension => {
             document.getElementById(`${dimension}Clippy`).addEventListener('input', () => calculateDiff(dimension));
             document.getElementById(`${dimension}Gamma`).addEventListener('input', () => calculateDiff(dimension));
+            document.getElementById(`${dimension}Tie`).addEventListener('input', () => calculateDiff(dimension));
         });
 
         // Form submission
         document.getElementById('dataEntryForm').addEventListener('submit', function(e) {
             e.preventDefault();
+            
+            // Validate all dimensions before submission
+            const dimensions = ['fidelity', 'aesthetics', 'consistency'];
+            for (const dimension of dimensions) {
+                const clippy = parseFloat(document.getElementById(`${dimension}Clippy`).value) || 0;
+                const gamma = parseFloat(document.getElementById(`${dimension}Gamma`).value) || 0;
+                const tie = parseFloat(document.getElementById(`${dimension}Tie`).value) || 0;
+                const sum = clippy + gamma + tie;
+                
+                if (Math.abs(sum - 100) > 0.1) {
+                    alert(`${dimension.charAt(0).toUpperCase() + dimension.slice(1)} validation failed:\nClippy + Gamma + Tie must equal 100%\nCurrent sum: ${sum.toFixed(1)}%`);
+                    return;
+                }
+            }
             
             const date = document.getElementById('entryDate').value;
             const sbsleo = parseFloat(document.getElementById('sbsleoScore').value);
