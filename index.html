@@ -168,8 +168,8 @@
         .chart-legend {
             display: flex;
             justify-content: center;
-            gap: 1.5rem;
-            margin-top: 1rem;
+            gap: 2rem;
+            margin-top: 1.5rem;
             flex-wrap: wrap;
         }
 
@@ -178,6 +178,7 @@
             align-items: center;
             gap: 0.5rem;
             font-size: 0.85rem;
+            margin: 0.25rem 0;
         }
 
         .legend-color {
@@ -292,6 +293,140 @@
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
+        .data-entry-form {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+
+        .form-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-section-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+            color: var(--text-primary);
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 0.9rem;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .form-group input[readonly] {
+            background: #e2e8f0;
+            cursor: not-allowed;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-start;
+            margin-top: 1.5rem;
+        }
+
+        .btn-primary,
+        .btn-secondary {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .btn-secondary {
+            background: var(--text-secondary);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #475569;
+        }
+
+        .generated-code {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+        }
+
+        .generated-code pre {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            margin: 0.5rem 0;
+        }
+
+        .success-message {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: #dcfce7;
+            border: 2px solid var(--success-color);
+            border-radius: 6px;
+            color: var(--success-color);
+        }
+
+        .success-message h4 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.1rem;
+        }
+
+        .success-message p {
+            margin: 0;
+            font-size: 0.9rem;
+        }
     </style>
 </head>
 <body>
@@ -305,7 +440,7 @@
         <!-- Charts Section -->
         <div class="charts-container">
             <div class="chart-card">
-                <h3 class="chart-title">SBSLeo Score Trend</h3>
+                <h3 class="chart-title">SBSLeo Score Trend (Edog)</h3>
                 <div class="line-chart-container">
                     <div class="y-axis-label">Score</div>
                     <div class="line-chart">
@@ -327,6 +462,7 @@
                         <span>12/2</span>
                         <span>12/3</span>
                         <span>12/4</span>
+                        <span>12/9</span>
                     </div>
                 </div>
                 <div class="chart-legend">
@@ -338,7 +474,7 @@
             </div>
 
             <div class="chart-card">
-                <h3 class="chart-title">Win Rate Difference Trends</h3>
+                <h3 class="chart-title">Win Rate Difference Trends (Edog)</h3>
                 <div class="line-chart-container">
                     <div class="y-axis-label">Difference (%)</div>
                     <div class="line-chart">
@@ -360,6 +496,7 @@
                         <span>12/2</span>
                         <span>12/3</span>
                         <span>12/4</span>
+                        <span>12/9</span>
                     </div>
                 </div>
                 <div class="chart-legend">
@@ -382,7 +519,7 @@
         <!-- Weekly Charts Section -->
         <div class="charts-container">
             <div class="chart-card">
-                <h3 class="chart-title">SBSLeo Score Trend (Weekly)</h3>
+                <h3 class="chart-title">SBSLeo Score Trend (PROD)</h3>
                 <div class="line-chart-container">
                     <div class="y-axis-label">Score</div>
                     <div class="line-chart">
@@ -404,7 +541,7 @@
             </div>
 
             <div class="chart-card">
-                <h3 class="chart-title">Win Rate Difference Trends (Weekly)</h3>
+                <h3 class="chart-title">Win Rate Difference Trends (PROD)</h3>
                 <div class="line-chart-container">
                     <div class="y-axis-label">Difference (%)</div>
                     <div class="line-chart">
@@ -434,533 +571,136 @@
             </div>
         </div>
 
-        <!-- Data Table (Daily) -->
-        <div class="data-table-container">
-            <h3 class="table-title">Detailed Performance Data (Weekdays)</h3>
-            <table class="data-table">
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>SBSLeo Score</th>
-                        <th>Test Cases</th>
-                        <th>Dimension</th>
-                        <th>Clippy</th>
-                        <th>Gamma</th>
-                        <th>Tie</th>
-                        <th>Win Rate Diff</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- 11/12 -->
-                    <tr>
-                        <td rowspan="3" class="metric-name">11/12</td>
-                        <td rowspan="3" class="highlight-worst">-16.76</td>
-                        <td rowspan="3">26</td>
-                        <td class="metric-name">Fidelity</td>
-                        <td>38.5%</td>
-                        <td>53.8%</td>
-                        <td>7.7%</td>
-                        <td class="highlight-worst">-15.3%</td>
-                    </tr>
-                    <tr>
-                        <td class="metric-name">Aesthetics</td>
-                        <td>50.0%</td>
-                        <td>50.0%</td>
-                        <td>0.0%</td>
-                        <td>0.0%</td>
-                    </tr>
-                    <tr>
-                        <td class="metric-name">Consistency</td>
-                        <td>19.2%</td>
-                        <td>57.7%</td>
-                        <td>23.1%</td>
-                        <td class="highlight-worst">-38.5%</td>
-                    </tr>
-                    <!-- 11/13 -->
-                    <tr>
-                        <td rowspan="3" class="metric-name">11/13</td>
-                        <td rowspan="3">25.43</td>
-                        <td rowspan="3">14</td>
-                        <td class="metric-name">Fidelity</td>
-                        <td class="highlight-best">85.7%</td>
-                        <td>14.3%</td>
-                        <td>0.0%</td>
-                        <td class="highlight-best">71.4%</td>
-                    </tr>
-                    <tr>
-                        <td class="metric-name">Aesthetics</td>
-                        <td>57.1%</td>
-                        <td>42.9%</td>
-                        <td>0.0%</td>
-                        <td>14.2%</td>
-                    </tr>
-                    <tr>
-                        <td class="metric-name">Consistency</td>
-                        <td>28.6%</td>
-                        <td>28.6%</td>
-                        <td>42.9%</td>
-                        <td>0.0%</td>
-                    </tr>
-                    <!-- 11/14 -->
-                    <tr>
-                        <td rowspan="3" class="metric-name">11/14</td>
-                        <td rowspan="3">20.20</td>
-                        <td rowspan="3">5</td>
-                        <td class="metric-name">Fidelity</td>
-                        <td>60.0%</td>
-                        <td>20.0%</td>
-                        <td>60.0%</td>
-                        <td>40.0%</td>
-                    </tr>
-                    <tr>
-                        <td class="metric-name">Aesthetics</td>
-                        <td>40.0%</td>
-                        <td>0.0%</td>
-                        <td>40.0%</td>
-                        <td>40.0%</td>
-                    </tr>
-                    <tr>
-                        <td class="metric-name">Consistency</td>
-                        <td>20.0%</td>
-                        <td>0.0%</td>
-                        <td>20.0%</td>
-                        <td>20.0%</td>
-                    </tr>
-                    <!-- 11/17 -->
-                    <tr>
-                        <td rowspan="3" class="metric-name">11/17</td>
-                        <td rowspan="3">-8.31</td>
-                        <td rowspan="3">16</td>
-                        <td class="metric-name">Fidelity</td>
-                        <td>62.5%</td>
-                        <td>25.0%</td>
-                        <td>12.5%</td>
-                        <td>37.5%</td>
-                    </tr>
-                    <tr>
-                        <td class="metric-name">Aesthetics</td>
-                        <td>37.5%</td>
-                        <td>62.5%</td>
-                        <td>0.0%</td>
-                        <td>-25.0%</td>
-                    </tr>
-                    <tr>
-                        <td class="metric-name">Consistency</td>
-                        <td>12.5%</td>
-                        <td>50.0%</td>
-                        <td>37.5%</td>
-                        <td>-37.5%</td>
-                    </tr>
-                    <!-- 11/19 -->
-                    <tr>
-                        <td rowspan="3" class="metric-name">11/19</td>
-                        <td rowspan="3">20.43</td>
-                        <td rowspan="3">21</td>
-                        <td class="metric-name">Fidelity</td>
-                        <td>81.0%</td>
-                        <td>19.0%</td>
-                        <td>0.0%</td>
-                        <td>62.0%</td>
-                    </tr>
-                    <tr>
-                        <td class="metric-name">Aesthetics</td>
-                        <td>66.7%</td>
-                        <td>33.3%</td>
-                        <td>0.0%</td>
-                        <td>33.4%</td>
-                    </tr>
-                    <tr>
-                        <td class="metric-name">Consistency</td>
-                        <td>19.0%</td>
-                        <td>33.3%</td>
-                        <td>47.6%</td>
-                        <td>-14.3%</td>
-                    </tr>
-                    <!-- 11/20 -->
-                    <tr>
-                        <td rowspan="3" class="metric-name">11/20</td>
-                        <td rowspan="3">19.59</td>
-                        <td rowspan="3">21</td>
-                        <td class="metric-name">Fidelity</td>
-                        <td>66.7%</td>
-                        <td>23.8%</td>
-                        <td>9.5%</td>
-                        <td>42.9%</td>
-                    </tr>
-                    <tr>
-                        <td class="metric-name">Aesthetics</td>
-                        <td>61.9%</td>
-                        <td>33.3%</td>
-                        <td>4.8%</td>
-                        <td>28.6%</td>
-                    </tr>
-                    <tr>
-                        <td class="metric-name">Consistency</td>
-                        <td>28.6%</td>
-                        <td>38.1%</td>
-                        <td>33.3%</td>
-                        <td>-9.5%</td>
-                    </tr>
-                    <!-- 11/24 -->
-                    <tr>
-                        <td rowspan="3" class="metric-name">11/24</td>
-                        <td rowspan="3">9.19</td>
-                        <td rowspan="3">23</td>
-                        <td class="metric-name">Fidelity</td>
-                        <td>47.8%</td>
-                        <td>47.8%</td>
-                        <td>4.3%</td>
-                        <td>0.0%</td>
-                    </tr>
-                    <tr>
-                        <td class="metric-name">Aesthetics</td>
-                        <td>60.9%</td>
-                        <td>39.1%</td>
-                        <td>39.1%</td>
-                        <td>21.8%</td>
-                    </tr>
-                    <tr>
-                        <td class="metric-name">Consistency</td>
-                        <td>17.4%</td>
-                        <td>21.7%</td>
-                        <td>21.7%</td>
-                        <td>-4.3%</td>
-                    </tr>
-                    <!-- 11/25 -->
-                    <tr>
-                        <td rowspan="3" class="metric-name">11/25</td>
-                        <td rowspan="3" class="highlight-best">31.33</td>
-                        <td rowspan="3">25</td>
-                        <td class="metric-name">Fidelity</td>
-                        <td>64.0%</td>
-                        <td>20.0%</td>
-                        <td>16.0%</td>
-                        <td>44.0%</td>
-                    </tr>
-                    <tr>
-                        <td class="metric-name">Aesthetics</td>
-                        <td class="highlight-best">76.0%</td>
-                        <td>24.0%</td>
-                        <td>0.0%</td>
-                        <td class="highlight-best">52.0%</td>
-                    </tr>
-                    <tr>
-                        <td class="metric-name">Consistency</td>
-                        <td>36.0%</td>
-                        <td>24.0%</td>
-                        <td>40.0%</td>
-                        <td>12.0%</td>
-                    </tr>
-                    <!-- 11/26 -->
-                    <tr>
-                        <td rowspan="3" class="metric-name">11/26</td>
-                        <td rowspan="3">6.77</td>
-                        <td rowspan="3">26</td>
-                        <td class="metric-name">Fidelity</td>
-                        <td>46.2%</td>
-                        <td>42.3%</td>
-                        <td>11.5%</td>
-                        <td>3.9%</td>
-                    </tr>
-                    <tr>
-                        <td class="metric-name">Aesthetics</td>
-                        <td>65.4%</td>
-                        <td>34.6%</td>
-                        <td>0.0%</td>
-                        <td>30.8%</td>
-                    </tr>
-                    <tr>
-                        <td class="metric-name">Consistency</td>
-                        <td>19.2%</td>
-                        <td>46.2%</td>
-                        <td>34.6%</td>
-                        <td>-27.0%</td>
-                    </tr>
-                    <!-- 11/27 -->
-                    <tr>
-                        <td rowspan="3" class="metric-name">11/27</td>
-                        <td rowspan="3">26.82</td>
-                        <td rowspan="3">29</td>
-                        <td class="metric-name">Fidelity</td>
-                        <td>74.1%</td>
-                        <td>22.2%</td>
-                        <td>3.7%</td>
-                        <td>51.9%</td>
-                    </tr>
-                    <tr>
-                        <td class="metric-name">Aesthetics</td>
-                        <td>66.7%</td>
-                        <td>33.3%</td>
-                        <td>0.0%</td>
-                        <td>33.4%</td>
-                    </tr>
-                    <tr>
-                        <td class="metric-name">Consistency</td>
-                        <td>25.9%</td>
-                        <td>22.2%</td>
-                        <td>51.9%</td>
-                        <td>3.7%</td>
-                    </tr>
-                    <!-- 11/28 -->
-                    <tr>
-                        <td rowspan="3" class="metric-name">11/28</td>
-                        <td rowspan="3">18.69</td>
-                        <td rowspan="3">30</td>
-                        <td class="metric-name">Fidelity</td>
-                        <td>60.7%</td>
-                        <td>35.7%</td>
-                        <td>3.6%</td>
-                        <td>25.0%</td>
-                    </tr>
-                    <tr>
-                        <td class="metric-name">Aesthetics</td>
-                        <td>57.1%</td>
-                        <td>39.3%</td>
-                        <td>3.6%</td>
-                        <td>17.8%</td>
-                    </tr>
-                    <tr>
-                        <td class="metric-name">Consistency</td>
-                        <td>25.0%</td>
-                        <td>14.3%</td>
-                        <td>60.7%</td>
-                        <td>10.7%</td>
-                    </tr>
-                    <!-- 12/1 -->
-                    <tr>
-                        <td rowspan="3" class="metric-name">12/1</td>
-                        <td rowspan="3">24.99</td>
-                        <td rowspan="3">26</td>
-                        <td class="metric-name">Fidelity</td>
-                        <td>65.4%</td>
-                        <td>34.6%</td>
-                        <td>3.6%</td>
-                        <td>30.8%</td>
-                    </tr>
-                    <tr>
-                        <td class="metric-name">Aesthetics</td>
-                        <td>65.4%</td>
-                        <td>34.6%</td>
-                        <td>3.6%</td>
-                        <td>30.8%</td>
-                    </tr>
-                    <tr>
-                        <td class="metric-name">Consistency</td>
-                        <td>76.9%</td>
-                        <td>23.1%</td>
-                        <td>60.7%</td>
-                        <td class="highlight-best">53.8%</td>
-                    </tr>
-                    <!-- 12/2 -->
-                    <tr>
-                        <td rowspan="3" class="metric-name">12/2</td>
-                        <td rowspan="3">23.13</td>
-                        <td rowspan="3">25</td>
-                        <td class="metric-name">Fidelity</td>
-                        <td>64.0%</td>
-                        <td>28.0%</td>
-                        <td>8.0%</td>
-                        <td>36.0%</td>
-                    </tr>
-                    <tr>
-                        <td class="metric-name">Aesthetics</td>
-                        <td>60.0%</td>
-                        <td>36.0%</td>
-                        <td>4.0%</td>
-                        <td>24.0%</td>
-                    </tr>
-                    <tr>
-                        <td class="metric-name">Consistency</td>
-                        <td>24.0%</td>
-                        <td>28.0%</td>
-                        <td>48.0%</td>
-                        <td>-4.0%</td>
-                    </tr>
-                    <!-- 12/3 -->
-                    <tr>
-                        <td rowspan="3" class="metric-name">12/3</td>
-                        <td rowspan="3">26.53</td>
-                        <td rowspan="3">17</td>
-                        <td class="metric-name">Fidelity</td>
-                        <td>76.5%</td>
-                        <td>23.5%</td>
-                        <td>0.0%</td>
-                        <td>53.0%</td>
-                    </tr>
-                    <tr>
-                        <td class="metric-name">Aesthetics</td>
-                        <td>58.8%</td>
-                        <td>35.3%</td>
-                        <td>5.9%</td>
-                        <td>23.5%</td>
-                    </tr>
-                    <tr>
-                        <td class="metric-name">Consistency</td>
-                        <td>17.6%</td>
-                        <td>23.5%</td>
-                        <td>58.8%</td>
-                        <td>-5.9%</td>
-                    </tr>
-                    <!-- 12/4 -->
-                    <tr>
-                        <td rowspan="3" class="metric-name">12/4</td>
-                        <td rowspan="3">26.67</td>
-                        <td rowspan="3">28</td>
-                        <td class="metric-name">Fidelity</td>
-                        <td>50.0%</td>
-                        <td>50.0%</td>
-                        <td>0.0%</td>
-                        <td>0.0%</td>
-                    </tr>
-                    <tr>
-                        <td class="metric-name">Aesthetics</td>
-                        <td>82.1%</td>
-                        <td>17.9%</td>
-                        <td>0.0%</td>
-                        <td>64.2%</td>
-                    </tr>
-                    <tr>
-                        <td class="metric-name">Consistency</td>
-                        <td>71.4%</td>
-                        <td>28.6%</td>
-                        <td>0.0%</td>
-                        <td>42.8%</td>
-                    </tr>
-                </tbody>
+        <!-- Hidden Data Tables for storage -->
+        <div style="display: none;">
+            <!-- Edog Table -->
+            <table class="data-table" id="edogTable">
+                <tbody></tbody>
+            </table>
+            
+            <!-- PROD Table -->
+            <table class="data-table" id="prodTable">
+                <tbody></tbody>
             </table>
         </div>
 
-        <!-- Data Table (Weekly) -->
+        <!--  Entry Form -->
         <div class="data-table-container">
-            <h3 class="table-title">Detailed Performance Data (Weekly)</h3>
-            <table class="data-table">
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>SBSLeo Score</th>
-                        <th>Test Cases</th>
-                        <th>Dimension</th>
-                        <th>Clippy</th>
-                        <th>Gamma</th>
-                        <th>Tie</th>
-                        <th>Win Rate Diff</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- 11/16 -->
-                    <tr>
-                        <td rowspan="3" class="metric-name">11/16</td>
-                        <td rowspan="3">13.25</td>
-                        <td rowspan="3">91</td>
-                        <td class="metric-name">Fidelity</td>
-                        <td>69.2%</td>
-                        <td>26.4%</td>
-                        <td>4.4%</td>
-                        <td>42.8%</td>
-                    </tr>
-                    <tr>
-                        <td class="metric-name">Aesthetics</td>
-                        <td>46.2%</td>
-                        <td>49.5%</td>
-                        <td>4.4%</td>
-                        <td>-3.3%</td>
-                    </tr>
-                    <tr>
-                        <td class="metric-name">Consistency</td>
-                        <td>30.8%</td>
-                        <td>27.5%</td>
-                        <td>41.8%</td>
-                        <td>3.3%</td>
-                    </tr>
-                    <!-- 11/23 -->
-                    <tr>
-                        <td rowspan="3" class="metric-name">11/23</td>
-                        <td rowspan="3">27.24</td>
-                        <td rowspan="3">104</td>
-                        <td class="metric-name">Fidelity</td>
-                        <td>74.2%</td>
-                        <td>24.2%</td>
-                        <td>1.7%</td>
-                        <td>50.0%</td>
-                    </tr>
-                    <tr>
-                        <td class="metric-name">Aesthetics</td>
-                        <td>60.1%</td>
-                        <td>34.8%</td>
-                        <td>5.1%</td>
-                        <td>25.3%</td>
-                    </tr>
-                    <tr>
-                        <td class="metric-name">Consistency</td>
-                        <td>36.0%</td>
-                        <td>18.5%</td>
-                        <td>45.5%</td>
-                        <td>17.5%</td>
-                    </tr>
-                    <!-- 11/30 -->
-                    <tr>
-                        <td rowspan="3" class="metric-name">11/30</td>
-                        <td rowspan="3">24.56</td>
-                        <td rowspan="3">88</td>
-                        <td class="metric-name">Fidelity</td>
-                        <td>68.2%</td>
-                        <td>27.3%</td>
-                        <td>4.5%</td>
-                        <td>40.9%</td>
-                    </tr>
-                    <tr>
-                        <td class="metric-name">Aesthetics</td>
-                        <td>61.4%</td>
-                        <td>31.8%</td>
-                        <td>6.8%</td>
-                        <td>29.6%</td>
-                    </tr>
-                    <tr>
-                        <td class="metric-name">Consistency</td>
-                        <td>36.4%</td>
-                        <td>20.5%</td>
-                        <td>43.2%</td>
-                        <td>15.9%</td>
-                    </tr>
-                    <!-- 12/7 -->
-                    <tr>
-                        <td rowspan="3" class="metric-name">12/7</td>
-                        <td rowspan="3">30.55</td>
-                        <td rowspan="3">94</td>
-                        <td class="metric-name">Fidelity</td>
-                        <td>79.8%</td>
-                        <td>16.0%</td>
-                        <td>4.3%</td>
-                        <td>63.8%</td>
-                    </tr>
-                    <tr>
-                        <td class="metric-name">Aesthetics</td>
-                        <td>60.6%</td>
-                        <td>30.9%</td>
-                        <td>8.5%</td>
-                        <td>29.7%</td>
-                    </tr>
-                    <tr>
-                        <td class="metric-name">Consistency</td>
-                        <td>29.8%</td>
-                        <td>17.0%</td>
-                        <td>53.2%</td>
-                        <td>12.8%</td>
-                    </tr>
-                </tbody>
-            </table>
+            <h3 class="table-title">Add New Data Entry</h3>
+            <form id="dataEntryForm" class="data-entry-form">
+                <div class="form-section">
+                    <h4 class="form-section-title">Basic Information</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="entryDate">Date:</label>
+                            <input type="text" id="entryDate" placeholder="e.g., 12/10" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="sbsleoScore">SBSLeo Score:</label>
+                            <input type="number" step="0.01" id="sbsleoScore" placeholder="e.g., 30.55" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="testCases">Test Cases:</label>
+                            <input type="number" id="testCases" placeholder="e.g., 94" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="dataType">Data Type:</label>
+                            <select id="dataType" required>
+                                <option value="edog">Edog (Daily)</option>
+                                <option value="prod">PROD (Weekly)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h4 class="form-section-title">Fidelity</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="fidelityClippy">Clippy (%):</label>
+                            <input type="number" step="0.1" id="fidelityClippy" placeholder="e.g., 79.8" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="fidelityGamma">Gamma (%):</label>
+                            <input type="number" step="0.1" id="fidelityGamma" placeholder="e.g., 16.0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="fidelityTie">Tie (%):</label>
+                            <input type="number" step="0.1" id="fidelityTie" placeholder="e.g., 4.3" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="fidelityDiff">Win Rate Diff (%):</label>
+                            <input type="number" step="0.1" id="fidelityDiff" placeholder="Auto-calculated" readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h4 class="form-section-title">Aesthetics</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="aestheticsClippy">Clippy (%):</label>
+                            <input type="number" step="0.1" id="aestheticsClippy" placeholder="e.g., 60.6" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="aestheticsGamma">Gamma (%):</label>
+                            <input type="number" step="0.1" id="aestheticsGamma" placeholder="e.g., 30.9" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="aestheticsTie">Tie (%):</label>
+                            <input type="number" step="0.1" id="aestheticsTie" placeholder="e.g., 8.5" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="aestheticsDiff">Win Rate Diff (%):</label>
+                            <input type="number" step="0.1" id="aestheticsDiff" placeholder="Auto-calculated" readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h4 class="form-section-title">Consistency</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="consistencyClippy">Clippy (%):</label>
+                            <input type="number" step="0.1" id="consistencyClippy" placeholder="e.g., 29.8" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="consistencyGamma">Gamma (%):</label>
+                            <input type="number" step="0.1" id="consistencyGamma" placeholder="e.g., 17.0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="consistencyTie">Tie (%):</label>
+                            <input type="number" step="0.1" id="consistencyTie" placeholder="e.g., 53.2" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="consistencyDiff">Win Rate Diff (%):</label>
+                            <input type="number" step="0.1" id="consistencyDiff" placeholder="Auto-calculated" readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">Add Data & Update Charts</button>
+                    <button type="button" class="btn-secondary" onclick="document.getElementById('dataEntryForm').reset();">Clear Form</button>
+                </div>
+            </form>
+
+            <div id="successMessage" class="success-message" style="display: none;">
+                <h4>✓ Data Added Successfully!</h4>
+                <p>The table and charts have been updated with the new data.</p>
+            </div>
         </div>
     </div>
 
     <script>
         // Data for charts
-        const dates = ['11/12', '11/13', '11/14', '11/17', '11/19', '11/20', '11/24', '11/25', '11/26', '11/27', '11/28', '12/1', '12/2', '12/3', '12/4'];
-        const sbsleoScores = [-16.76, 25.43, 20.20, -8.31, 20.43, 19.59, 9.19, 31.33, 6.77, 26.82, 18.69, 24.99, 23.13, 26.53, 26.67];
+        const dates = ['11/12', '11/13', '11/14', '11/17', '11/19', '11/20', '11/24', '11/25', '11/26', '11/27', '11/28', '12/1', '12/2', '12/3', '12/4', '12/9'];
+        const sbsleoScores = [-16.76, 25.43, 20.20, -8.31, 20.43, 19.59, 9.19, 31.33, 6.77, 26.82, 18.69, 24.99, 23.13, 26.53, 26.67, 34.53];
         
         // Win rate differences
-        const fidelityDiff = [-15.3, 71.4, 40.0, 37.5, 62.0, 42.9, 0.0, 44.0, 3.9, 51.9, 25.0, 30.8, 36.0, 53.0, 0.0];
-        const aestheticsDiff = [0.0, 14.2, 40.0, -25.0, 33.4, 28.6, 21.8, 52.0, 30.8, 33.4, 17.8, 30.8, 24.0, 23.5, 64.2];
-        const consistencyDiff = [-38.5, 0.0, 20.0, -37.5, -14.3, -9.5, -4.3, 12.0, -27.0, 3.7, 10.7, 53.8, -4.0, -5.9, 42.8];
+        const fidelityDiff = [-15.3, 71.4, 40.0, 37.5, 62.0, 42.9, 0.0, 44.0, 3.9, 51.9, 25.0, 30.8, 36.0, 53.0, 0.0, 23.0];
+        const aestheticsDiff = [0.0, 14.2, 40.0, -25.0, 33.4, 28.6, 21.8, 52.0, 30.8, 33.4, 17.8, 30.8, 24.0, 23.5, 64.2, 69.2];
+        const consistencyDiff = [-38.5, 0.0, 20.0, -37.5, -14.3, -9.5, -4.3, 12.0, -27.0, 3.7, 10.7, 53.8, -4.0, -5.9, 42.8, 53.8];
 
         // Weekly data (11/16, 11/23, 11/30, and 12/7)
         const weeklyDates = ['11/16', '11/23', '11/30', '12/7'];
@@ -1160,6 +900,179 @@
                 ], -10, 60, weeklyDates);
             }, 1100);
         });
+
+        // Auto-calculate Win Rate Diff
+        function calculateDiff(dimension) {
+            const clippy = parseFloat(document.getElementById(`${dimension}Clippy`).value) || 0;
+            const gamma = parseFloat(document.getElementById(`${dimension}Gamma`).value) || 0;
+            const diff = clippy - gamma;
+            document.getElementById(`${dimension}Diff`).value = diff.toFixed(1);
+        }
+
+        // Add event listeners for auto-calculation
+        ['fidelity', 'aesthetics', 'consistency'].forEach(dimension => {
+            document.getElementById(`${dimension}Clippy`).addEventListener('input', () => calculateDiff(dimension));
+            document.getElementById(`${dimension}Gamma`).addEventListener('input', () => calculateDiff(dimension));
+        });
+
+        // Form submission
+        document.getElementById('dataEntryForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const date = document.getElementById('entryDate').value;
+            const sbsleo = parseFloat(document.getElementById('sbsleoScore').value);
+            const testCases = parseInt(document.getElementById('testCases').value);
+            const dataType = document.getElementById('dataType').value;
+            
+            const fidelityClippy = parseFloat(document.getElementById('fidelityClippy').value);
+            const fidelityGamma = parseFloat(document.getElementById('fidelityGamma').value);
+            const fidelityTie = parseFloat(document.getElementById('fidelityTie').value);
+            const fidelityDiff = parseFloat(document.getElementById('fidelityDiff').value);
+            
+            const aestheticsClippy = parseFloat(document.getElementById('aestheticsClippy').value);
+            const aestheticsGamma = parseFloat(document.getElementById('aestheticsGamma').value);
+            const aestheticsTie = parseFloat(document.getElementById('aestheticsTie').value);
+            const aestheticsDiff = parseFloat(document.getElementById('aestheticsDiff').value);
+            
+            const consistencyClippy = parseFloat(document.getElementById('consistencyClippy').value);
+            const consistencyGamma = parseFloat(document.getElementById('consistencyGamma').value);
+            const consistencyTie = parseFloat(document.getElementById('consistencyTie').value);
+            const consistencyDiff = parseFloat(document.getElementById('consistencyDiff').value);
+
+            if (dataType === 'edog') {
+                // Add to daily data
+                dates.push(date);
+                sbsleoScores.push(sbsleo);
+                fidelityDiff.push(fidelityDiff);
+                aestheticsDiff.push(aestheticsDiff);
+                consistencyDiff.push(consistencyDiff);
+
+                // Add row to hidden Edog table
+                const edogTable = document.getElementById('edogTable').querySelector('tbody');
+                const newRow = `
+                    <tr>
+                        <td rowspan="3" class="metric-name">${date}</td>
+                        <td rowspan="3">${sbsleo}</td>
+                        <td rowspan="3">${testCases}</td>
+                        <td class="metric-name">Fidelity</td>
+                        <td>${fidelityClippy}%</td>
+                        <td>${fidelityGamma}%</td>
+                        <td>${fidelityTie}%</td>
+                        <td>${fidelityDiff}%</td>
+                    </tr>
+                    <tr>
+                        <td class="metric-name">Aesthetics</td>
+                        <td>${aestheticsClippy}%</td>
+                        <td>${aestheticsGamma}%</td>
+                        <td>${aestheticsTie}%</td>
+                        <td>${aestheticsDiff}%</td>
+                    </tr>
+                    <tr>
+                        <td class="metric-name">Consistency</td>
+                        <td>${consistencyClippy}%</td>
+                        <td>${consistencyGamma}%</td>
+                        <td>${consistencyTie}%</td>
+                        <td>${consistencyDiff}%</td>
+                    </tr>
+                `;
+                edogTable.insertAdjacentHTML('beforeend', newRow);
+
+                // Update daily charts
+                document.getElementById('sbsleoChart').innerHTML = '';
+                document.getElementById('winRateDiffChart').innerHTML = '';
+                
+                setTimeout(() => {
+                    createLineChart('sbsleoChart', [
+                        { name: 'SBSLeo Score', class: 'diff', data: sbsleoScores, unit: '', delay: 0 }
+                    ], -20, 40, dates);
+                }, 100);
+
+                setTimeout(() => {
+                    createLineChart('winRateDiffChart', [
+                        { name: 'Fidelity Diff', class: 'clippy', data: fidelityDiff, unit: '%', delay: 0 },
+                        { name: 'Aesthetics Diff', class: 'gamma', data: aestheticsDiff, unit: '%', delay: 300 },
+                        { name: 'Consistency Diff', class: 'consistency', data: consistencyDiff, unit: '%', delay: 600 }
+                    ], -50, 80, dates);
+                }, 400);
+
+            } else {
+                // Add to weekly data
+                weeklyDates.push(date);
+                weeklySbsleoScores.push(sbsleo);
+                weeklyFidelityDiff.push(fidelityDiff);
+                weeklyAestheticsDiff.push(aestheticsDiff);
+                weeklyConsistencyDiff.push(consistencyDiff);
+
+                // Add row to hidden PROD table
+                const prodTable = document.getElementById('prodTable').querySelector('tbody');
+                const newRow = `
+                    <tr>
+                        <td rowspan="3" class="metric-name">${date}</td>
+                        <td rowspan="3">${sbsleo}</td>
+                        <td rowspan="3">${testCases}</td>
+                        <td class="metric-name">Fidelity</td>
+                        <td>${fidelityClippy}%</td>
+                        <td>${fidelityGamma}%</td>
+                        <td>${fidelityTie}%</td>
+                        <td>${fidelityDiff}%</td>
+                    </tr>
+                    <tr>
+                        <td class="metric-name">Aesthetics</td>
+                        <td>${aestheticsClippy}%</td>
+                        <td>${aestheticsGamma}%</td>
+                        <td>${aestheticsTie}%</td>
+                        <td>${aestheticsDiff}%</td>
+                    </tr>
+                    <tr>
+                        <td class="metric-name">Consistency</td>
+                        <td>${consistencyClippy}%</td>
+                        <td>${consistencyGamma}%</td>
+                        <td>${consistencyTie}%</td>
+                        <td>${consistencyDiff}%</td>
+                    </tr>
+                `;
+                prodTable.insertAdjacentHTML('beforeend', newRow);
+
+                // Update weekly charts
+                document.getElementById('weeklySbsleoChart').innerHTML = '';
+                document.getElementById('weeklyWinRateDiffChart').innerHTML = '';
+                
+                setTimeout(() => {
+                    createLineChart('weeklySbsleoChart', [
+                        { name: 'SBSLeo Score', class: 'diff', data: weeklySbsleoScores, unit: '', delay: 0 }
+                    ], 0, 40, weeklyDates);
+                }, 100);
+
+                setTimeout(() => {
+                    createLineChart('weeklyWinRateDiffChart', [
+                        { name: 'Fidelity Diff', class: 'clippy', data: weeklyFidelityDiff, unit: '%', delay: 0 },
+                        { name: 'Aesthetics Diff', class: 'gamma', data: weeklyAestheticsDiff, unit: '%', delay: 300 },
+                        { name: 'Consistency Diff', class: 'consistency', data: weeklyConsistencyDiff, unit: '%', delay: 600 }
+                    ], -10, 70, weeklyDates);
+                }, 400);
+            }
+
+            // Show success message
+            document.getElementById('successMessage').style.display = 'block';
+            document.getElementById('successMessage').scrollIntoView({ behavior: 'smooth' });
+            
+            // Reset form and hide success message after 3 seconds
+            setTimeout(() => {
+                document.getElementById('dataEntryForm').reset();
+                setTimeout(() => {
+                    document.getElementById('successMessage').style.display = 'none';
+                }, 2000);
+            }, 1000);
+        });
+
+        function copyToClipboard() {
+            const codeOutput = document.getElementById('codeOutput').textContent;
+            navigator.clipboard.writeText(codeOutput).then(() => {
+                alert('Code copied to clipboard!');
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+        }
     </script>
 </body>
 </html>
