@@ -952,25 +952,25 @@
             const fidelityClippy = parseFloat(document.getElementById('fidelityClippy').value);
             const fidelityGamma = parseFloat(document.getElementById('fidelityGamma').value);
             const fidelityTie = parseFloat(document.getElementById('fidelityTie').value);
-            const fidelityDiff = parseFloat(document.getElementById('fidelityDiff').value);
+            const fidelityDiffValue = parseFloat(document.getElementById('fidelityDiff').value);
             
             const aestheticsClippy = parseFloat(document.getElementById('aestheticsClippy').value);
             const aestheticsGamma = parseFloat(document.getElementById('aestheticsGamma').value);
             const aestheticsTie = parseFloat(document.getElementById('aestheticsTie').value);
-            const aestheticsDiff = parseFloat(document.getElementById('aestheticsDiff').value);
+            const aestheticsDiffValue = parseFloat(document.getElementById('aestheticsDiff').value);
             
             const consistencyClippy = parseFloat(document.getElementById('consistencyClippy').value);
             const consistencyGamma = parseFloat(document.getElementById('consistencyGamma').value);
             const consistencyTie = parseFloat(document.getElementById('consistencyTie').value);
-            const consistencyDiff = parseFloat(document.getElementById('consistencyDiff').value);
+            const consistencyDiffValue = parseFloat(document.getElementById('consistencyDiff').value);
 
             if (dataType === 'edog') {
                 // Add to daily data
                 dates.push(date);
                 sbsleoScores.push(sbsleo);
-                fidelityDiff.push(fidelityDiff);
-                aestheticsDiff.push(aestheticsDiff);
-                consistencyDiff.push(consistencyDiff);
+                fidelityDiff.push(fidelityDiffValue);
+                aestheticsDiff.push(aestheticsDiffValue);
+                consistencyDiff.push(consistencyDiffValue);
 
                 // Add row to hidden Edog table
                 const edogTable = document.getElementById('edogTable').querySelector('tbody');
@@ -983,21 +983,21 @@
                         <td>${fidelityClippy}%</td>
                         <td>${fidelityGamma}%</td>
                         <td>${fidelityTie}%</td>
-                        <td>${fidelityDiff}%</td>
+                        <td>${fidelityDiffValue}%</td>
                     </tr>
                     <tr>
                         <td class="metric-name">Aesthetics</td>
                         <td>${aestheticsClippy}%</td>
                         <td>${aestheticsGamma}%</td>
                         <td>${aestheticsTie}%</td>
-                        <td>${aestheticsDiff}%</td>
+                        <td>${aestheticsDiffValue}%</td>
                     </tr>
                     <tr>
                         <td class="metric-name">Consistency</td>
                         <td>${consistencyClippy}%</td>
                         <td>${consistencyGamma}%</td>
                         <td>${consistencyTie}%</td>
-                        <td>${consistencyDiff}%</td>
+                        <td>${consistencyDiffValue}%</td>
                     </tr>
                 `;
                 edogTable.insertAdjacentHTML('beforeend', newRow);
@@ -1024,9 +1024,9 @@
                 // Add to weekly data
                 weeklyDates.push(date);
                 weeklySbsleoScores.push(sbsleo);
-                weeklyFidelityDiff.push(fidelityDiff);
-                weeklyAestheticsDiff.push(aestheticsDiff);
-                weeklyConsistencyDiff.push(consistencyDiff);
+                weeklyFidelityDiff.push(fidelityDiffValue);
+                weeklyAestheticsDiff.push(aestheticsDiffValue);
+                weeklyConsistencyDiff.push(consistencyDiffValue);
 
                 // Add row to hidden PROD table
                 const prodTable = document.getElementById('prodTable').querySelector('tbody');
@@ -1039,21 +1039,21 @@
                         <td>${fidelityClippy}%</td>
                         <td>${fidelityGamma}%</td>
                         <td>${fidelityTie}%</td>
-                        <td>${fidelityDiff}%</td>
+                        <td>${fidelityDiffValue}%</td>
                     </tr>
                     <tr>
                         <td class="metric-name">Aesthetics</td>
                         <td>${aestheticsClippy}%</td>
                         <td>${aestheticsGamma}%</td>
                         <td>${aestheticsTie}%</td>
-                        <td>${aestheticsDiff}%</td>
+                        <td>${aestheticsDiffValue}%</td>
                     </tr>
                     <tr>
                         <td class="metric-name">Consistency</td>
                         <td>${consistencyClippy}%</td>
                         <td>${consistencyGamma}%</td>
                         <td>${consistencyTie}%</td>
-                        <td>${consistencyDiff}%</td>
+                        <td>${consistencyDiffValue}%</td>
                     </tr>
                 `;
                 prodTable.insertAdjacentHTML('beforeend', newRow);
