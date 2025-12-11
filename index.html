@@ -981,9 +981,6 @@
             const consistencyDiffValue = parseFloat(document.getElementById('consistencyDiff').value);
 
             if (dataType === 'edog') {
-                console.log('=== Adding Edog Data ===');
-                console.log('Before:', {dates: [...dates], scores: [...sbsleoScores]});
-                
                 // Add to daily data
                 dates.push(date);
                 sbsleoScores.push(sbsleo);
@@ -991,17 +988,12 @@
                 aestheticsDiff.push(aestheticsDiffValue);
                 consistencyDiff.push(consistencyDiffValue);
 
-                console.log('After:', {dates: [...dates], scores: [...sbsleoScores]});
-
                 // Save to localStorage
                 localStorage.setItem('edogDates', JSON.stringify(dates));
                 localStorage.setItem('edogScores', JSON.stringify(sbsleoScores));
                 localStorage.setItem('edogFidelity', JSON.stringify(fidelityDiff));
                 localStorage.setItem('edogAesthetics', JSON.stringify(aestheticsDiff));
                 localStorage.setItem('edogConsistency', JSON.stringify(consistencyDiff));
-                
-                console.log('Saved to localStorage');
-                console.log('localStorage check:', JSON.parse(localStorage.getItem('edogDates')));
 
                 // Add row to hidden Edog table
                 const edogTable = document.getElementById('edogTable').querySelector('tbody');
@@ -1034,33 +1026,21 @@
                 edogTable.insertAdjacentHTML('beforeend', newRow);
 
                 // Update daily charts
-                console.log('=== Updating Charts ===');
-                console.log('Clearing chart elements...');
                 document.getElementById('sbsleoChart').innerHTML = '';
                 document.getElementById('winRateDiffChart').innerHTML = '';
                 
-                console.log('Data for charts:', {
-                    dates: [...dates],
-                    scores: [...sbsleoScores],
-                    fidelity: [...fidelityDiff]
-                });
-                
                 setTimeout(() => {
-                    console.log('Creating SBSLeo chart...');
                     createLineChart('sbsleoChart', [
                         { name: 'SBSLeo Score', class: 'diff', data: sbsleoScores, unit: '', delay: 0 }
                     ], -20, 40, dates);
-                    console.log('SBSLeo chart created');
                 }, 100);
 
                 setTimeout(() => {
-                    console.log('Creating Win Rate Diff chart...');
                     createLineChart('winRateDiffChart', [
                         { name: 'Fidelity Diff', class: 'clippy', data: fidelityDiff, unit: '%', delay: 0 },
                         { name: 'Aesthetics Diff', class: 'gamma', data: aestheticsDiff, unit: '%', delay: 300 },
                         { name: 'Consistency Diff', class: 'consistency', data: consistencyDiff, unit: '%', delay: 600 }
                     ], -50, 80, dates);
-                    console.log('Win Rate Diff chart created');
                 }, 400);
 
             } else {
@@ -1130,16 +1110,32 @@
             // Show success message
             document.getElementById('successMessage').style.display = 'block';
             
-            // Scroll to top of charts to see the update
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            // Wait for charts to finish rendering before scrolling
+            setTimeout(() => {
+                // Scroll to charts area
+                const chartsSection = document.querySelector('.container');
+                chartsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                
+                // Add a visual highlight to show charts updated
+                const charts = document.querySelectorAll('.data-table-container');
+                charts.forEach(chart => {
+                    chart.style.transition = 'all 0.3s ease';
+                    chart.style.transform = 'scale(1.02)';
+                    chart.style.boxShadow = '0 0 20px rgba(59, 130, 246, 0.5)';
+                    setTimeout(() => {
+                        chart.style.transform = 'scale(1)';
+                        chart.style.boxShadow = '';
+                    }, 1000);
+                });
+            }, 1500); // Wait for chart animations to complete
             
-            // Reset form and hide success message after 3 seconds
+            // Reset form and hide success message after 5 seconds
             setTimeout(() => {
                 document.getElementById('dataEntryForm').reset();
                 setTimeout(() => {
                     document.getElementById('successMessage').style.display = 'none';
                 }, 2000);
-            }, 1000);
+            }, 3000);
         });
 
         function copyToClipboard() {
