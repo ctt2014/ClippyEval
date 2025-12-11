@@ -1079,7 +1079,9 @@
 
             // Show success message
             document.getElementById('successMessage').style.display = 'block';
-            document.getElementById('successMessage').scrollIntoView({ behavior: 'smooth' });
+            
+            // Scroll to top of charts to see the update
+            window.scrollTo({ top: 0, behavior: 'smooth' });
             
             // Reset form and hide success message after 3 seconds
             setTimeout(() => {
