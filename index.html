@@ -693,9 +693,9 @@
             <!-- Debug Tools -->
             <div style="margin-top: 20px; padding: 15px; background: #f0f0f0; border-radius: 8px;">
                 <h4 style="margin: 0 0 10px 0;">🔧 Debug Tools</h4>
-                <button onclick="console.log('Edog Data:', {dates, sbsleoScores, fidelityDiff, aestheticsDiff, consistencyDiff}); alert('Check console for Edog data');" style="padding: 8px 15px; margin-right: 10px; background: #3b82f6; color: white; border: none; border-radius: 4px; cursor: pointer;">Show Edog Data</button>
-                <button onclick="console.log('PROD Data:', {weeklyDates, weeklySbsleoScores, weeklyFidelityDiff, weeklyAestheticsDiff, weeklyConsistencyDiff}); alert('Check console for PROD data');" style="padding: 8px 15px; margin-right: 10px; background: #10b981; color: white; border: none; border-radius: 4px; cursor: pointer;">Show PROD Data</button>
-                <button onclick="if(confirm('Clear all localStorage data and reload?')) { localStorage.clear(); location.reload(); }" style="padding: 8px 15px; background: #ef4444; color: white; border: none; border-radius: 4px; cursor: pointer;">Clear All Data</button>
+                <button id="showEdogBtn" style="padding: 8px 15px; margin-right: 10px; background: #3b82f6; color: white; border: none; border-radius: 4px; cursor: pointer;">Show Edog Data</button>
+                <button id="showProdBtn" style="padding: 8px 15px; margin-right: 10px; background: #10b981; color: white; border: none; border-radius: 4px; cursor: pointer;">Show PROD Data</button>
+                <button id="clearDataBtn" style="padding: 8px 15px; background: #ef4444; color: white; border: none; border-radius: 4px; cursor: pointer;">Clear All Data</button>
             </div>
         </div>
     </div>
@@ -1150,6 +1150,38 @@
                 console.error('Failed to copy: ', err);
             });
         }
+
+        // Debug button event listeners
+        document.getElementById('showEdogBtn').addEventListener('click', function() {
+            console.log('=== Edog (Daily) Data ===');
+            console.log('Dates:', dates);
+            console.log('SBSLeo Scores:', sbsleoScores);
+            console.log('Fidelity Diff:', fidelityDiff);
+            console.log('Aesthetics Diff:', aestheticsDiff);
+            console.log('Consistency Diff:', consistencyDiff);
+            console.log('Total entries:', dates.length);
+            alert('Edog data logged to console (F12). Total entries: ' + dates.length);
+        });
+
+        document.getElementById('showProdBtn').addEventListener('click', function() {
+            console.log('=== PROD (Weekly) Data ===');
+            console.log('Dates:', weeklyDates);
+            console.log('SBSLeo Scores:', weeklySbsleoScores);
+            console.log('Fidelity Diff:', weeklyFidelityDiff);
+            console.log('Aesthetics Diff:', weeklyAestheticsDiff);
+            console.log('Consistency Diff:', weeklyConsistencyDiff);
+            console.log('Total entries:', weeklyDates.length);
+            alert('PROD data logged to console (F12). Total entries: ' + weeklyDates.length);
+        });
+
+        document.getElementById('clearDataBtn').addEventListener('click', function() {
+            if(confirm('⚠️ This will clear all data and reload the page. Continue?')) {
+                console.log('Clearing localStorage...');
+                localStorage.clear();
+                alert('Data cleared! Page will reload.');
+                location.reload();
+            }
+        });
     </script>
 </body>
 </html>
