@@ -693,23 +693,31 @@
     </div>
 
     <script>
-        // Data for charts
-        const dates = ['11/12', '11/13', '11/14', '11/17', '11/19', '11/20', '11/24', '11/25', '11/26', '11/27', '11/28', '12/1', '12/2', '12/3', '12/4', '12/9'];
-        const sbsleoScores = [-16.76, 25.43, 20.20, -8.31, 20.43, 19.59, 9.19, 31.33, 6.77, 26.82, 18.69, 24.99, 23.13, 26.53, 26.67, 34.53];
+        // Load data from localStorage or use default values
+        const defaultDates = ['11/12', '11/13', '11/14', '11/17', '11/19', '11/20', '11/24', '11/25', '11/26', '11/27', '11/28', '12/1', '12/2', '12/3', '12/4', '12/9'];
+        const defaultSbsleoScores = [-16.76, 25.43, 20.20, -8.31, 20.43, 19.59, 9.19, 31.33, 6.77, 26.82, 18.69, 24.99, 23.13, 26.53, 26.67, 34.53];
+        const defaultFidelityDiff = [-15.3, 71.4, 40.0, 37.5, 62.0, 42.9, 0.0, 44.0, 3.9, 51.9, 25.0, 30.8, 36.0, 53.0, 0.0, 23.0];
+        const defaultAestheticsDiff = [0.0, 14.2, 40.0, -25.0, 33.4, 28.6, 21.8, 52.0, 30.8, 33.4, 17.8, 30.8, 24.0, 23.5, 64.2, 69.2];
+        const defaultConsistencyDiff = [-38.5, 0.0, 20.0, -37.5, -14.3, -9.5, -4.3, 12.0, -27.0, 3.7, 10.7, 53.8, -4.0, -5.9, 42.8, 53.8];
         
-        // Win rate differences
-        const fidelityDiff = [-15.3, 71.4, 40.0, 37.5, 62.0, 42.9, 0.0, 44.0, 3.9, 51.9, 25.0, 30.8, 36.0, 53.0, 0.0, 23.0];
-        const aestheticsDiff = [0.0, 14.2, 40.0, -25.0, 33.4, 28.6, 21.8, 52.0, 30.8, 33.4, 17.8, 30.8, 24.0, 23.5, 64.2, 69.2];
-        const consistencyDiff = [-38.5, 0.0, 20.0, -37.5, -14.3, -9.5, -4.3, 12.0, -27.0, 3.7, 10.7, 53.8, -4.0, -5.9, 42.8, 53.8];
+        const dates = JSON.parse(localStorage.getItem('edogDates')) || defaultDates;
+        const sbsleoScores = JSON.parse(localStorage.getItem('edogScores')) || defaultSbsleoScores;
+        const fidelityDiff = JSON.parse(localStorage.getItem('edogFidelity')) || defaultFidelityDiff;
+        const aestheticsDiff = JSON.parse(localStorage.getItem('edogAesthetics')) || defaultAestheticsDiff;
+        const consistencyDiff = JSON.parse(localStorage.getItem('edogConsistency')) || defaultConsistencyDiff;
 
-        // Weekly data (11/16, 11/23, 11/30, and 12/7)
-        const weeklyDates = ['11/16', '11/23', '11/30', '12/7'];
-        const weeklySbsleoScores = [13.25, 27.24, 24.56, 30.55];
+        // Weekly data
+        const defaultWeeklyDates = ['11/16', '11/23', '11/30', '12/7'];
+        const defaultWeeklySbsleoScores = [13.25, 27.24, 24.56, 30.55];
+        const defaultWeeklyFidelityDiff = [42.8, 50.0, 40.9, 63.8];
+        const defaultWeeklyAestheticsDiff = [-3.3, 25.3, 29.6, 29.7];
+        const defaultWeeklyConsistencyDiff = [3.3, 17.5, 15.9, 12.8];
         
-        // Weekly win rate differences
-        const weeklyFidelityDiff = [42.8, 50.0, 40.9, 63.8];
-        const weeklyAestheticsDiff = [-3.3, 25.3, 29.6, 29.7];
-        const weeklyConsistencyDiff = [3.3, 17.5, 15.9, 12.8];
+        const weeklyDates = JSON.parse(localStorage.getItem('prodDates')) || defaultWeeklyDates;
+        const weeklySbsleoScores = JSON.parse(localStorage.getItem('prodScores')) || defaultWeeklySbsleoScores;
+        const weeklyFidelityDiff = JSON.parse(localStorage.getItem('prodFidelity')) || defaultWeeklyFidelityDiff;
+        const weeklyAestheticsDiff = JSON.parse(localStorage.getItem('prodAesthetics')) || defaultWeeklyAestheticsDiff;
+        const weeklyConsistencyDiff = JSON.parse(localStorage.getItem('prodConsistency')) || defaultWeeklyConsistencyDiff;
 
         function createLineChart(svgId, datasets, yMin = null, yMax = null, chartDates = null) {
             const svg = document.getElementById(svgId);
@@ -972,6 +980,13 @@
                 aestheticsDiff.push(aestheticsDiffValue);
                 consistencyDiff.push(consistencyDiffValue);
 
+                // Save to localStorage
+                localStorage.setItem('edogDates', JSON.stringify(dates));
+                localStorage.setItem('edogScores', JSON.stringify(sbsleoScores));
+                localStorage.setItem('edogFidelity', JSON.stringify(fidelityDiff));
+                localStorage.setItem('edogAesthetics', JSON.stringify(aestheticsDiff));
+                localStorage.setItem('edogConsistency', JSON.stringify(consistencyDiff));
+
                 // Add row to hidden Edog table
                 const edogTable = document.getElementById('edogTable').querySelector('tbody');
                 const newRow = `
@@ -1027,6 +1042,13 @@
                 weeklyFidelityDiff.push(fidelityDiffValue);
                 weeklyAestheticsDiff.push(aestheticsDiffValue);
                 weeklyConsistencyDiff.push(consistencyDiffValue);
+
+                // Save to localStorage
+                localStorage.setItem('prodDates', JSON.stringify(weeklyDates));
+                localStorage.setItem('prodScores', JSON.stringify(weeklySbsleoScores));
+                localStorage.setItem('prodFidelity', JSON.stringify(weeklyFidelityDiff));
+                localStorage.setItem('prodAesthetics', JSON.stringify(weeklyAestheticsDiff));
+                localStorage.setItem('prodConsistency', JSON.stringify(weeklyConsistencyDiff));
 
                 // Add row to hidden PROD table
                 const prodTable = document.getElementById('prodTable').querySelector('tbody');
