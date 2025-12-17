@@ -651,7 +651,9 @@
                 <h4 style="margin: 0 0 10px 0;">🔧 Debug Tools</h4>
                 <button id="showEdogBtn" style="padding: 8px 15px; margin-right: 10px; background: #3b82f6; color: white; border: none; border-radius: 4px; cursor: pointer;">Show Edog Data</button>
                 <button id="showProdBtn" style="padding: 8px 15px; margin-right: 10px; background: #10b981; color: white; border: none; border-radius: 4px; cursor: pointer;">Show PROD Data</button>
+                <button id="exportDataBtn" style="padding: 8px 15px; margin-right: 10px; background: #8b5cf6; color: white; border: none; border-radius: 4px; cursor: pointer;">Export Data for Git</button>
                 <button id="clearDataBtn" style="padding: 8px 15px; background: #ef4444; color: white; border: none; border-radius: 4px; cursor: pointer;">Clear All Data</button>
+                <div id="exportOutput" style="margin-top: 15px; padding: 10px; background: white; border-radius: 4px; font-family: monospace; font-size: 12px; max-height: 300px; overflow-y: auto; display: none;"></div>
             </div>
         </div>
     </div>
@@ -659,10 +661,10 @@
     <script>
         // Load data from localStorage or use default values
         const defaultDates = ['11/12', '11/13', '11/14', '11/17', '11/19', '11/20', '11/24', '11/25', '11/26', '11/27', '11/28', '12/1', '12/2', '12/3', '12/4', '12/9'];
-        const defaultSbsleoScores = [-16.76, 25.43, 20.20, -8.31, 20.43, 19.59, 9.19, 31.33, 6.77, 26.82, 18.69, 24.99, 23.13, 26.53, 26.67, 34.53];
-        const defaultFidelityDiff = [-15.3, 71.4, 40.0, 37.5, 62.0, 42.9, 0.0, 44.0, 3.9, 51.9, 25.0, 30.8, 36.0, 53.0, 0.0, 23.0];
-        const defaultAestheticsDiff = [0.0, 14.2, 40.0, -25.0, 33.4, 28.6, 21.8, 52.0, 30.8, 33.4, 17.8, 30.8, 24.0, 23.5, 64.2, 69.2];
-        const defaultConsistencyDiff = [-38.5, 0.0, 20.0, -37.5, -14.3, -9.5, -4.3, 12.0, -27.0, 3.7, 10.7, 53.8, -4.0, -5.9, 42.8, 53.8];
+        const defaultSbsleoScores = [-16.76, 25.43, 20.2, -8.31, 20.43, 19.59, 9.19, 31.33, 6.77, 26.82, 18.69, 24.99, 23.13, 26.53, 26.67, 34.53];
+        const defaultFidelityDiff = [-15.3, 71.4, 40, 37.5, 62, 42.9, 0, 44, 3.9, 51.9, 25, 30.8, 36, 53, 0, 23];
+        const defaultAestheticsDiff = [0, 14.2, 40, -25, 33.4, 28.6, 21.8, 52, 30.8, 33.4, 17.8, 30.8, 24, 23.5, 64.2, 69.2];
+        const defaultConsistencyDiff = [-38.5, 0, 20, -37.5, -14.3, -9.5, -4.3, 12, -27, 3.7, 10.7, 53.8, -4, -5.9, 42.8, 53.8];
         
         let dates = JSON.parse(localStorage.getItem('edogDates')) || [...defaultDates];
         let sbsleoScores = JSON.parse(localStorage.getItem('edogScores')) || [...defaultSbsleoScores];
@@ -671,11 +673,11 @@
         let consistencyDiff = JSON.parse(localStorage.getItem('edogConsistency')) || [...defaultConsistencyDiff];
 
         // Weekly data
-        const defaultWeeklyDates = ['11/16', '11/23', '11/30', '12/7'];
-        const defaultWeeklySbsleoScores = [13.25, 27.24, 24.56, 30.55];
-        const defaultWeeklyFidelityDiff = [42.8, 50.0, 40.9, 63.8];
-        const defaultWeeklyAestheticsDiff = [-3.3, 25.3, 29.6, 29.7];
-        const defaultWeeklyConsistencyDiff = [3.3, 17.5, 15.9, 12.8];
+        const defaultWeeklyDates = ['11/16', '11/23', '11/30', '12/7', '12/14'];
+        const defaultWeeklySbsleoScores = [13.25, 27.24, 24.56, 30.55, 31.67];
+        const defaultWeeklyFidelityDiff = [42.8, 50, 40.9, 63.8, 69.5];
+        const defaultWeeklyAestheticsDiff = [-3.3, 25.3, 29.6, 29.7, 46.4];
+        const defaultWeeklyConsistencyDiff = [3.3, 17.5, 15.9, 12.8, 17.9];
         
         let weeklyDates = JSON.parse(localStorage.getItem('prodDates')) || [...defaultWeeklyDates];
         let weeklySbsleoScores = JSON.parse(localStorage.getItem('prodScores')) || [...defaultWeeklySbsleoScores];
@@ -1122,6 +1124,33 @@
             console.log('Consistency Diff:', weeklyConsistencyDiff);
             console.log('Total entries:', weeklyDates.length);
             alert('PROD data logged to console (F12). Total entries: ' + weeklyDates.length);
+        });
+
+        document.getElementById('exportDataBtn').addEventListener('click', function() {
+            const output = document.getElementById('exportOutput');
+            const exportData = `EDOG Daily Data:
+const defaultDates = ${JSON.stringify(dates)};
+const defaultSbsleoScores = ${JSON.stringify(sbsleoScores)};
+const defaultFidelityDiff = ${JSON.stringify(fidelityDiff)};
+const defaultAestheticsDiff = ${JSON.stringify(aestheticsDiff)};
+const defaultConsistencyDiff = ${JSON.stringify(consistencyDiff)};
+
+PROD Weekly Data:
+const defaultWeeklyDates = ${JSON.stringify(weeklyDates)};
+const defaultWeeklySbsleoScores = ${JSON.stringify(weeklySbsleoScores)};
+const defaultWeeklyFidelityDiff = ${JSON.stringify(weeklyFidelityDiff)};
+const defaultWeeklyAestheticsDiff = ${JSON.stringify(weeklyAestheticsDiff)};
+const defaultWeeklyConsistencyDiff = ${JSON.stringify(weeklyConsistencyDiff)};`;
+            
+            output.textContent = exportData;
+            output.style.display = 'block';
+            
+            // Copy to clipboard
+            navigator.clipboard.writeText(exportData).then(() => {
+                alert('✓ Data exported and copied to clipboard!\n\nEdog entries: ' + dates.length + '\nPROD entries: ' + weeklyDates.length + '\n\nYou can now paste this data and I will update the HTML file.');
+            }).catch(() => {
+                alert('Data exported below. Please copy it manually and send it to me.');
+            });
         });
 
         document.getElementById('clearDataBtn').addEventListener('click', function() {
