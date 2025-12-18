@@ -823,29 +823,44 @@
                     label.setAttribute('opacity', '0');
                     label.textContent = labelText;
                     svg.appendChild(label);
-                    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-                    circle.setAttribute('cx', x);
-                    circle.setAttribute('cy', y);
-                    // 判断是否为SBSLeo主图且日期>=12/9
-                    let extraClass = '';
-                    if (svgId === 'sbsleoChart' && dataset.class === 'diff' && useDates[i]) {
+                    // 判断是否为SBSLeo图表且日期>=12/9
+                    let isAfter1209 = false;
+                    if ((svgId === 'sbsleoChart' || svgId === 'weeklySbsleoChart') && dataset.class === 'diff' && useDates[i]) {
                         const d = useDates[i];
-                        // 12/9及之后
                         const parts = d.split('/');
                         if (parts.length === 2) {
                             const month = parseInt(parts[0], 10);
                             const day = parseInt(parts[1], 10);
                             if (month > 12 || (month === 12 && day >= 9)) {
-                                extraClass = 'after-1209';
+                                isAfter1209 = true;
                             }
                         }
                     }
-                    circle.setAttribute('class', `line-point ${dataset.class}${extraClass ? ' ' + extraClass : ''}`);
-                    circle.setAttribute('opacity', '0');
+                    
+                    let pointElement;
+                    if (isAfter1209) {
+                        // 12/9及之后用方形
+                        pointElement = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                        const size = 10;
+                        pointElement.setAttribute('x', x - size / 2);
+                        pointElement.setAttribute('y', y - size / 2);
+                        pointElement.setAttribute('width', size);
+                        pointElement.setAttribute('height', size);
+                        pointElement.setAttribute('class', 'line-point after-1209');
+                    } else {
+                        // 12/9之前用圆形
+                        pointElement = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                        pointElement.setAttribute('cx', x);
+                        pointElement.setAttribute('cy', y);
+                        pointElement.setAttribute('class', `line-point ${dataset.class}`);
+                    }
+                    
+                    pointElement.setAttribute('opacity', '0');
+                    pointElement.style.cursor = 'pointer';
                     const title = document.createElementNS('http://www.w3.org/2000/svg', 'title');
                     title.textContent = `${dataset.name}: ${value}${dataset.unit || ''} (${useDates[i]})`;
-                    circle.appendChild(title);
-                    svg.appendChild(circle);
+                    pointElement.appendChild(title);
+                    svg.appendChild(pointElement);
                     // Animate elements
                     const pointDelay = (dataset.delay || 0) + i * 100;
                     setTimeout(() => {
@@ -853,8 +868,8 @@
                         labelBg.style.opacity = '0.9';
                         label.style.transition = 'opacity 0.5s ease';
                         label.style.opacity = '1';
-                        circle.style.transition = 'opacity 0.5s ease';
-                        circle.style.opacity = '1';
+                        pointElement.style.transition = 'opacity 0.5s ease';
+                        pointElement.style.opacity = '1';
                     }, pointDelay);
                 });
             });
