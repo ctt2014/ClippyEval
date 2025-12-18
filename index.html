@@ -139,6 +139,7 @@
         .line-point.clippy { stroke: var(--clippy-color); }
         .line-point.gamma { stroke: var(--gamma-color); }
         .line-point.diff { stroke: var(--success-color); }
+        .line-point.after-1209 { stroke: #a21caf; }
         .line-point.consistency { stroke: var(--warning-color); }
 
         .line-point:hover {
@@ -802,13 +803,11 @@
                 dataset.data.forEach((value, i) => {
                     const x = padding.left + i * xScale;
                     const y = height - padding.bottom - (value - yAxisMin) * yScale;
-                    
                     // Create data label
                     const labelText = `${value}${dataset.unit || ''}`;
                     const textWidth = labelText.length * 6;
                     const textHeight = 12;
                     const labelY = y - 15;
-                    
                     const labelBg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
                     labelBg.setAttribute('x', x - textWidth / 2);
                     labelBg.setAttribute('y', labelY - textHeight / 2);
@@ -817,7 +816,6 @@
                     labelBg.setAttribute('class', 'data-label-background');
                     labelBg.setAttribute('opacity', '0');
                     svg.appendChild(labelBg);
-                    
                     const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
                     label.setAttribute('x', x);
                     label.setAttribute('y', labelY);
@@ -825,22 +823,31 @@
                     label.setAttribute('opacity', '0');
                     label.textContent = labelText;
                     svg.appendChild(label);
-                    
                     const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
                     circle.setAttribute('cx', x);
                     circle.setAttribute('cy', y);
-                    circle.setAttribute('class', `line-point ${dataset.class}`);
+                    // 判断是否为SBSLeo主图且日期>=12/9
+                    let extraClass = '';
+                    if (svgId === 'sbsleoChart' && dataset.class === 'diff' && useDates[i]) {
+                        const d = useDates[i];
+                        // 12/9及之后
+                        const parts = d.split('/');
+                        if (parts.length === 2) {
+                            const month = parseInt(parts[0], 10);
+                            const day = parseInt(parts[1], 10);
+                            if (month > 12 || (month === 12 && day >= 9)) {
+                                extraClass = 'after-1209';
+                            }
+                        }
+                    }
+                    circle.setAttribute('class', `line-point ${dataset.class}${extraClass ? ' ' + extraClass : ''}`);
                     circle.setAttribute('opacity', '0');
-                    
                     const title = document.createElementNS('http://www.w3.org/2000/svg', 'title');
                     title.textContent = `${dataset.name}: ${value}${dataset.unit || ''} (${useDates[i]})`;
                     circle.appendChild(title);
-                    
                     svg.appendChild(circle);
-                    
                     // Animate elements
                     const pointDelay = (dataset.delay || 0) + i * 100;
-                    
                     setTimeout(() => {
                         labelBg.style.transition = 'opacity 0.5s ease';
                         labelBg.style.opacity = '0.9';
