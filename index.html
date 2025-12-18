@@ -660,11 +660,11 @@
 
     <script>
         // Load data from localStorage or use default values
-        const defaultDates = ['11/12', '11/13', '11/14', '11/17', '11/19', '11/20', '11/24', '11/25', '11/26', '11/27', '11/28', '12/1', '12/2', '12/3', '12/4', '12/9'];
-        const defaultSbsleoScores = [-16.76, 25.43, 20.2, -8.31, 20.43, 19.59, 9.19, 31.33, 6.77, 26.82, 18.69, 24.99, 23.13, 26.53, 26.67, 34.53];
-        const defaultFidelityDiff = [-15.3, 71.4, 40, 37.5, 62, 42.9, 0, 44, 3.9, 51.9, 25, 30.8, 36, 53, 0, 23];
-        const defaultAestheticsDiff = [0, 14.2, 40, -25, 33.4, 28.6, 21.8, 52, 30.8, 33.4, 17.8, 30.8, 24, 23.5, 64.2, 69.2];
-        const defaultConsistencyDiff = [-38.5, 0, 20, -37.5, -14.3, -9.5, -4.3, 12, -27, 3.7, 10.7, 53.8, -4, -5.9, 42.8, 53.8];
+        const defaultDates = ["11/12","11/13","11/14","11/17","11/19","11/20","11/24","11/25","11/26","11/27","11/28","12/1","12/2","12/3","12/4","12/9","12/11","12/16"];
+        const defaultSbsleoScores = [-16.76,25.43,20.2,-8.31,20.43,19.59,9.19,31.33,6.77,26.82,18.69,24.99,23.13,26.53,26.67,34.53,26.05,40.45];
+        const defaultFidelityDiff = [-15.3,71.4,40,37.5,62,42.9,0,44,3.9,51.9,25,30.8,36,53,0,23,15.4,28];
+        const defaultAestheticsDiff = [0,14.2,40,-25,33.4,28.6,21.8,52,30.8,33.4,17.8,30.8,24,23.5,64.2,69.2,53.8,84];
+        const defaultConsistencyDiff = [-38.5,0,20,-37.5,-14.3,-9.5,-4.3,12,-27,3.7,10.7,53.8,-4,-5.9,42.8,53.8,38.4,64];
         
         let dates = JSON.parse(localStorage.getItem('edogDates')) || [...defaultDates];
         let sbsleoScores = JSON.parse(localStorage.getItem('edogScores')) || [...defaultSbsleoScores];
@@ -673,11 +673,11 @@
         let consistencyDiff = JSON.parse(localStorage.getItem('edogConsistency')) || [...defaultConsistencyDiff];
 
         // Weekly data
-        const defaultWeeklyDates = ['11/16', '11/23', '11/30', '12/7', '12/14'];
-        const defaultWeeklySbsleoScores = [13.25, 27.24, 24.56, 30.55, 31.67];
-        const defaultWeeklyFidelityDiff = [42.8, 50, 40.9, 63.8, 69.5];
-        const defaultWeeklyAestheticsDiff = [-3.3, 25.3, 29.6, 29.7, 46.4];
-        const defaultWeeklyConsistencyDiff = [3.3, 17.5, 15.9, 12.8, 17.9];
+        const defaultWeeklyDates = ["11/16","11/23","11/30","12/7","12/14"];
+        const defaultWeeklySbsleoScores = [13.25,27.24,24.56,30.55,31.67];
+        const defaultWeeklyFidelityDiff = [42.8,50,40.9,63.8,69.5];
+        const defaultWeeklyAestheticsDiff = [-3.3,25.3,29.6,29.7,46.4];
+        const defaultWeeklyConsistencyDiff = [3.3,17.5,15.9,12.8,17.9];
         
         let weeklyDates = JSON.parse(localStorage.getItem('prodDates')) || [...defaultWeeklyDates];
         let weeklySbsleoScores = JSON.parse(localStorage.getItem('prodScores')) || [...defaultWeeklySbsleoScores];
