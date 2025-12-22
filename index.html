@@ -139,7 +139,6 @@
         .line-point.clippy { stroke: var(--clippy-color); }
         .line-point.gamma { stroke: var(--gamma-color); }
         .line-point.diff { stroke: var(--success-color); }
-        .line-point.after-1209 { stroke: #a21caf; }
         .line-point.consistency { stroke: var(--warning-color); }
 
         .line-point:hover {
@@ -436,6 +435,25 @@
             <h1 class="dashboard-title">Clippy Evaluation</h1>
             <p class="dashboard-subtitle">SBSLeo Score: Range (-99 to +99) • Combined across all dimensions and segments. If the value is greater than 0, it indicates that Clippy performs better overall on this test set</p>
             <p class="dashboard-subtitle">Win Rate Difference = Clippy Win Rate - Gamma Win Rate</p>
+            
+            <!-- Version Legend -->
+            <div style="margin-top: 1.5rem; padding: 1rem; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); display: inline-block;">
+                <div style="display: flex; gap: 2rem; align-items: center; font-size: 0.9rem;">
+                    <div style="font-weight: 600; color: var(--primary-color);">Product Version:</div>
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <svg width="20" height="20" style="vertical-align: middle;">
+                            <circle cx="10" cy="10" r="6" fill="white" stroke="#64748b" stroke-width="3"/>
+                        </svg>
+                        <span>V3.2</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <svg width="20" height="20" style="vertical-align: middle;">
+                            <rect x="4" y="4" width="12" height="12" fill="white" stroke="#64748b" stroke-width="3"/>
+                        </svg>
+                        <span>V3.3</span>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Charts Section -->
@@ -449,12 +467,6 @@
                     </div>
                     <div id="sbsleoChartLabels" class="chart-axis-labels"></div>
                 </div>
-                <div class="chart-legend">
-                    <div class="legend-item">
-                        <div class="legend-color diff"></div>
-                        <span>SBSLeo Score</span>
-                    </div>
-                </div>
             </div>
 
             <div class="chart-card">
@@ -465,20 +477,6 @@
                         <svg id="winRateDiffChart"></svg>
                     </div>
                     <div id="winRateDiffChartLabels" class="chart-axis-labels"></div>
-                </div>
-                <div class="chart-legend">
-                    <div class="legend-item">
-                        <div class="legend-color clippy"></div>
-                        <span>Fidelity Diff</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-color gamma"></div>
-                        <span>Aesthetics Diff</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-color consistency"></div>
-                        <span>Consistency Diff</span>
-                    </div>
                 </div>
             </div>
         </div>
@@ -494,12 +492,6 @@
                     </div>
                     <div id="weeklySbsleoChartLabels" class="chart-axis-labels"></div>
                 </div>
-                <div class="chart-legend">
-                    <div class="legend-item">
-                        <div class="legend-color diff"></div>
-                        <span>SBSLeo Score</span>
-                    </div>
-                </div>
             </div>
 
             <div class="chart-card">
@@ -510,20 +502,6 @@
                         <svg id="weeklyWinRateDiffChart"></svg>
                     </div>
                     <div id="weeklyWinRateDiffChartLabels" class="chart-axis-labels"></div>
-                </div>
-                <div class="chart-legend">
-                    <div class="legend-item">
-                        <div class="legend-color clippy"></div>
-                        <span>Fidelity Diff</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-color gamma"></div>
-                        <span>Aesthetics Diff</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-color consistency"></div>
-                        <span>Consistency Diff</span>
-                    </div>
                 </div>
             </div>
         </div>
@@ -674,11 +652,11 @@
         let consistencyDiff = JSON.parse(localStorage.getItem('edogConsistency')) || [...defaultConsistencyDiff];
 
         // Weekly data
-        const defaultWeeklyDates = ["11/16","11/23","11/30","12/7","12/14"];
-        const defaultWeeklySbsleoScores = [13.25,27.24,24.56,30.55,31.67];
-        const defaultWeeklyFidelityDiff = [42.8,50,40.9,63.8,69.5];
-        const defaultWeeklyAestheticsDiff = [-3.3,25.3,29.6,29.7,46.4];
-        const defaultWeeklyConsistencyDiff = [3.3,17.5,15.9,12.8,17.9];
+        const defaultWeeklyDates = ["11/16","11/23","11/30","12/7","12/14","12/20"];
+        const defaultWeeklySbsleoScores = [13.25,27.24,24.56,30.55,31.67,29.7];
+        const defaultWeeklyFidelityDiff = [42.8,50,40.9,63.8,69.5,44.3];
+        const defaultWeeklyAestheticsDiff = [-3.3,25.3,29.6,29.7,46.4,42.3];
+        const defaultWeeklyConsistencyDiff = [3.3,17.5,15.9,12.8,17.9,19.5];
         
         let weeklyDates = JSON.parse(localStorage.getItem('prodDates')) || [...defaultWeeklyDates];
         let weeklySbsleoScores = JSON.parse(localStorage.getItem('prodScores')) || [...defaultWeeklySbsleoScores];
@@ -823,9 +801,9 @@
                     label.setAttribute('opacity', '0');
                     label.textContent = labelText;
                     svg.appendChild(label);
-                    // 判断是否为SBSLeo图表且日期>=12/9
+                    // 判断日期是否>=12/9（适用于所有图表）
                     let isAfter1209 = false;
-                    if ((svgId === 'sbsleoChart' || svgId === 'weeklySbsleoChart') && dataset.class === 'diff' && useDates[i]) {
+                    if (useDates[i]) {
                         const d = useDates[i];
                         const parts = d.split('/');
                         if (parts.length === 2) {
@@ -839,16 +817,16 @@
                     
                     let pointElement;
                     if (isAfter1209) {
-                        // 12/9及之后用方形
+                        // 12/9及之后用方形，保持原来的颜色
                         pointElement = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
                         const size = 10;
                         pointElement.setAttribute('x', x - size / 2);
                         pointElement.setAttribute('y', y - size / 2);
                         pointElement.setAttribute('width', size);
                         pointElement.setAttribute('height', size);
-                        pointElement.setAttribute('class', 'line-point after-1209');
+                        pointElement.setAttribute('class', `line-point ${dataset.class}`);
                     } else {
-                        // 12/9之前用圆形
+                        // 12/9之前用圆形，保持原来的颜色
                         pointElement = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
                         pointElement.setAttribute('cx', x);
                         pointElement.setAttribute('cy', y);
