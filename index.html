@@ -726,9 +726,24 @@
             if (!container) return;
             
             container.innerHTML = '';
-            datesArray.forEach(date => {
+            
+            // Determine step based on array length to avoid overcrowding
+            let step = 1;
+            if (datesArray.length > 15) {
+                step = 3; // Show every 3rd date
+            } else if (datesArray.length > 10) {
+                step = 2; // Show every 2nd date
+            }
+            
+            datesArray.forEach((date, index) => {
                 const span = document.createElement('span');
-                span.textContent = date;
+                if (index % step === 0 || index === datesArray.length - 1) {
+                    // Show dates at intervals and always show the last date
+                    span.textContent = date;
+                } else {
+                    // Empty span to maintain spacing
+                    span.textContent = '';
+                }
                 container.appendChild(span);
             });
         }
