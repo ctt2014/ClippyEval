@@ -467,6 +467,20 @@
                     </div>
                     <div id="sbsleoChartLabels" class="chart-axis-labels"></div>
                 </div>
+                <div class="chart-legend">
+                    <div class="legend-item">
+                        <svg width="16" height="16" style="vertical-align: middle;">
+                            <circle cx="8" cy="8" r="5" fill="white" stroke="#16a34a" stroke-width="3"/>
+                        </svg>
+                        <span>V3.2</span>
+                    </div>
+                    <div class="legend-item">
+                        <svg width="16" height="16" style="vertical-align: middle;">
+                            <rect x="3" y="3" width="10" height="10" fill="white" stroke="#16a34a" stroke-width="3"/>
+                        </svg>
+                        <span>V3.3</span>
+                    </div>
+                </div>
             </div>
 
             <div class="chart-card">
@@ -477,6 +491,20 @@
                         <svg id="winRateDiffChart"></svg>
                     </div>
                     <div id="winRateDiffChartLabels" class="chart-axis-labels"></div>
+                </div>
+                <div class="chart-legend">
+                    <div class="legend-item">
+                        <svg width="16" height="16" style="vertical-align: middle;">
+                            <circle cx="8" cy="8" r="5" fill="white" stroke="#64748b" stroke-width="3"/>
+                        </svg>
+                        <span>V3.2</span>
+                    </div>
+                    <div class="legend-item">
+                        <svg width="16" height="16" style="vertical-align: middle;">
+                            <rect x="3" y="3" width="10" height="10" fill="white" stroke="#64748b" stroke-width="3"/>
+                        </svg>
+                        <span>V3.3</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -492,6 +520,20 @@
                     </div>
                     <div id="weeklySbsleoChartLabels" class="chart-axis-labels"></div>
                 </div>
+                <div class="chart-legend">
+                    <div class="legend-item">
+                        <svg width="16" height="16" style="vertical-align: middle;">
+                            <circle cx="8" cy="8" r="5" fill="white" stroke="#16a34a" stroke-width="3"/>
+                        </svg>
+                        <span>V3.2</span>
+                    </div>
+                    <div class="legend-item">
+                        <svg width="16" height="16" style="vertical-align: middle;">
+                            <rect x="3" y="3" width="10" height="10" fill="white" stroke="#16a34a" stroke-width="3"/>
+                        </svg>
+                        <span>V3.3</span>
+                    </div>
+                </div>
             </div>
 
             <div class="chart-card">
@@ -502,6 +544,20 @@
                         <svg id="weeklyWinRateDiffChart"></svg>
                     </div>
                     <div id="weeklyWinRateDiffChartLabels" class="chart-axis-labels"></div>
+                </div>
+                <div class="chart-legend">
+                    <div class="legend-item">
+                        <svg width="16" height="16" style="vertical-align: middle;">
+                            <circle cx="8" cy="8" r="5" fill="white" stroke="#64748b" stroke-width="3"/>
+                        </svg>
+                        <span>V3.2</span>
+                    </div>
+                    <div class="legend-item">
+                        <svg width="16" height="16" style="vertical-align: middle;">
+                            <rect x="3" y="3" width="10" height="10" fill="white" stroke="#64748b" stroke-width="3"/>
+                        </svg>
+                        <span>V3.3</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -639,11 +695,11 @@
 
     <script>
         // Load data from localStorage or use default values
-        const defaultDates = ["11/12","11/13","11/14","11/17","11/19","11/20","11/24","11/25","11/26","11/27","11/28","12/1","12/2","12/3","12/4","12/9","12/11","12/16"];
-        const defaultSbsleoScores = [-16.76,25.43,20.2,-8.31,20.43,19.59,9.19,31.33,6.77,26.82,18.69,24.99,23.13,26.53,26.67,34.53,26.05,40.45];
-        const defaultFidelityDiff = [-15.3,71.4,40,37.5,62,42.9,0,44,3.9,51.9,25,30.8,36,53,0,23,15.4,28];
-        const defaultAestheticsDiff = [0,14.2,40,-25,33.4,28.6,21.8,52,30.8,33.4,17.8,30.8,24,23.5,64.2,69.2,53.8,84];
-        const defaultConsistencyDiff = [-38.5,0,20,-37.5,-14.3,-9.5,-4.3,12,-27,3.7,10.7,53.8,-4,-5.9,42.8,53.8,38.4,64];
+        const defaultDates = ["11/12","11/13","11/14","11/17","11/19","11/20","11/24","11/25","11/26","11/27","11/28","12/1","12/2","12/3","12/4","12/9","12/11","12/16","12/17","12/22","12/25"];
+        const defaultSbsleoScores = [-16.76,25.43,20.2,-8.31,20.43,19.59,9.19,31.33,6.77,26.82,18.69,24.99,23.13,26.53,26.67,34.53,26.05,40.45,24.28,28.39,27.04];
+        const defaultFidelityDiff = [-15.3,71.4,40,37.5,62,42.9,0,44,3.9,51.9,25,30.8,36,53,0,23,15.4,28,22.2,28.6,36];
+        const defaultAestheticsDiff = [0,14.2,40,-25,33.4,28.6,21.8,52,30.8,33.4,17.8,30.8,24,23.5,64.2,69.2,53.8,84,50,21.4,28];
+        const defaultConsistencyDiff = [-38.5,0,20,-37.5,-14.3,-9.5,-4.3,12,-27,3.7,10.7,53.8,-4,-5.9,42.8,53.8,38.4,64,5.6,64.2,44];
         
         let dates = JSON.parse(localStorage.getItem('edogDates')) || [...defaultDates];
         let sbsleoScores = JSON.parse(localStorage.getItem('edogScores')) || [...defaultSbsleoScores];
