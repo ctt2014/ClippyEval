@@ -450,7 +450,13 @@
                         <svg width="20" height="20" style="vertical-align: middle;">
                             <rect x="4" y="4" width="12" height="12" fill="white" stroke="#64748b" stroke-width="3"/>
                         </svg>
-                        <span>V3.3</span>
+                        <span>V3.3-V1</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <svg width="20" height="20" style="vertical-align: middle;">
+                            <polygon points="10,4 16,16 4,16" fill="white" stroke="#64748b" stroke-width="3"/>
+                        </svg>
+                        <span>V3.3-V2</span>
                     </div>
                 </div>
             </div>
@@ -585,6 +591,22 @@
                                 <option value="prod">PROD (Weekly)</option>
                             </select>
                         </div>
+                        <div class="form-group">
+                            <label for="edogCategory">Edog Category:</label>
+                            <select id="edogCategory">
+                                <option value="">N/A</option>
+                                <option value="v3.3-v1">V3.3-V1</option>
+                                <option value="v3.3-v2">V3.3-V2</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="prodCategory">Product Version:</label>
+                            <select id="prodCategory">
+                                <option value="">N/A</option>
+                                <option value="v3.3-v1">V3.3-V1</option>
+                                <option value="v3.3-v2">V3.3-V2</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
 
@@ -684,12 +706,14 @@
         const defaultFidelityDiff = [-15.3,71.4,40,37.5,62,42.9,0,44,3.9,51.9,25,30.8,36,53,0,23,15.4,28,22.2,28.6,36,51.3,42.3,33.4,48.2,53.8,74];
         const defaultAestheticsDiff = [0,14.2,40,-25,33.4,28.6,21.8,52,30.8,33.4,17.8,30.8,24,23.5,64.2,69.2,53.8,84,50,21.4,28,8.7,26.9,42.8,11.2,-23,30.4];
         const defaultConsistencyDiff = [-38.5,0,20,-37.5,-14.3,-9.5,-4.3,12,-27,3.7,10.7,53.8,-4,-5.9,42.8,53.8,38.4,64,5.6,64.2,44,8.7,-23.1,-23.8,11.2,-15.4,56.6];
+        const defaultEdogCategories = ["","","","","","","","","","","","","","","","","","","","","","","v3.3-v2","v3.3-v2","v3.3-v2","v3.3-v2","v3.3-v2"];
         
         let dates = JSON.parse(localStorage.getItem('edogDates')) || [...defaultDates];
         let sbsleoScores = JSON.parse(localStorage.getItem('edogScores')) || [...defaultSbsleoScores];
         let fidelityDiff = JSON.parse(localStorage.getItem('edogFidelity')) || [...defaultFidelityDiff];
         let aestheticsDiff = JSON.parse(localStorage.getItem('edogAesthetics')) || [...defaultAestheticsDiff];
         let consistencyDiff = JSON.parse(localStorage.getItem('edogConsistency')) || [...defaultConsistencyDiff];
+        let edogCategories = JSON.parse(localStorage.getItem('edogCategories')) || [...defaultEdogCategories];
 
         // Weekly data
         const defaultWeeklyDates = ["11/16","11/23","11/30","12/7","12/14","12/20"];
@@ -703,6 +727,7 @@
         let weeklyFidelityDiff = JSON.parse(localStorage.getItem('prodFidelity')) || [...defaultWeeklyFidelityDiff];
         let weeklyAestheticsDiff = JSON.parse(localStorage.getItem('prodAesthetics')) || [...defaultWeeklyAestheticsDiff];
         let weeklyConsistencyDiff = JSON.parse(localStorage.getItem('prodConsistency')) || [...defaultWeeklyConsistencyDiff];
+        let prodCategories = JSON.parse(localStorage.getItem('prodCategories')) || [];
 
         // Function to update date labels dynamically
         function updateDateLabels(labelContainerId, datesArray) {
@@ -713,7 +738,9 @@
             
             // Determine step based on array length to avoid overcrowding
             let step = 1;
-            if (datesArray.length > 15) {
+            if (datesArray.length > 20) {
+                step = 4; // Show every 4th date
+            } else if (datesArray.length > 15) {
                 step = 3; // Show every 3rd date
             } else if (datesArray.length > 10) {
                 step = 2; // Show every 2nd date
@@ -721,8 +748,8 @@
             
             datesArray.forEach((date, index) => {
                 const span = document.createElement('span');
-                if (index % step === 0 || index === datesArray.length - 1) {
-                    // Show dates at intervals and always show the last date
+                // Show dates at intervals, always show first and last date
+                if (index === 0 || index === datesArray.length - 1 || index % step === 0) {
                     span.textContent = date;
                 } else {
                     // Empty span to maintain spacing
@@ -732,7 +759,7 @@
             });
         }
 
-        function createLineChart(svgId, datasets, yMin = null, yMax = null, chartDates = null) {
+        function createLineChart(svgId, datasets, yMin = null, yMax = null, chartDates = null, categoryArray = null) {
             const svg = document.getElementById(svgId);
             const rect = svg.getBoundingClientRect();
             const width = rect.width || 400;
@@ -856,23 +883,36 @@
                     label.setAttribute('opacity', '0');
                     label.textContent = labelText;
                     svg.appendChild(label);
-                    // 判断日期是否>=12/9（适用于所有图表）
-                    let isAfter1209 = false;
-                    if (useDates[i]) {
-                        const d = useDates[i];
-                        const parts = d.split('/');
-                        if (parts.length === 2) {
-                            const month = parseInt(parts[0], 10);
-                            const day = parseInt(parts[1], 10);
-                            if (month > 12 || (month === 12 && day >= 9)) {
-                                isAfter1209 = true;
+                    
+                    // 判断使用什么形状
+                    let pointElement;
+                    let shapeType = 'circle'; // 默认圆形
+                    
+                    // 如果提供了category数组，根据category决定形状
+                    if (categoryArray && categoryArray[i]) {
+                        if (categoryArray[i] === 'v3.3-v1') {
+                            shapeType = 'square';
+                        } else if (categoryArray[i] === 'v3.3-v2') {
+                            shapeType = 'triangle';
+                        }
+                    } else {
+                        // 没有category信息时，使用旧的日期判断逻辑（仅用于向后兼容）
+                        if (useDates[i]) {
+                            const d = useDates[i];
+                            const parts = d.split('/');
+                            if (parts.length === 2) {
+                                const month = parseInt(parts[0], 10);
+                                const day = parseInt(parts[1], 10);
+                                // 12月9日及之后，或者1月及以后的数据都是v3.3
+                                if (month === 1 || (month === 12 && day >= 9)) {
+                                    shapeType = 'square';
+                                }
                             }
                         }
                     }
                     
-                    let pointElement;
-                    if (isAfter1209) {
-                        // 12/9及之后用方形，保持原来的颜色
+                    if (shapeType === 'square') {
+                        // 正方形
                         pointElement = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
                         const size = 10;
                         pointElement.setAttribute('x', x - size / 2);
@@ -880,8 +920,15 @@
                         pointElement.setAttribute('width', size);
                         pointElement.setAttribute('height', size);
                         pointElement.setAttribute('class', `line-point ${dataset.class}`);
+                    } else if (shapeType === 'triangle') {
+                        // 三角形
+                        pointElement = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+                        const size = 11;
+                        const points = `${x},${y - size/2} ${x - size/2},${y + size/2} ${x + size/2},${y + size/2}`;
+                        pointElement.setAttribute('points', points);
+                        pointElement.setAttribute('class', `line-point ${dataset.class}`);
                     } else {
-                        // 12/9之前用圆形，保持原来的颜色
+                        // 圆形（默认）
                         pointElement = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
                         pointElement.setAttribute('cx', x);
                         pointElement.setAttribute('cy', y);
@@ -920,7 +967,7 @@
             setTimeout(() => {
                 createLineChart('sbsleoChart', [
                     { name: 'SBSLeo Score', class: 'diff', data: sbsleoScores, unit: '', delay: 0 }
-                ], -20, 35, dates);
+                ], -20, 35, dates, edogCategories);
             }, 200);
 
             // Win Rate Difference Chart
@@ -929,14 +976,14 @@
                     { name: 'Fidelity Diff', class: 'clippy', data: fidelityDiff, unit: '%', delay: 0 },
                     { name: 'Aesthetics Diff', class: 'gamma', data: aestheticsDiff, unit: '%', delay: 300 },
                     { name: 'Consistency Diff', class: 'consistency', data: consistencyDiff, unit: '%', delay: 600 }
-                ], -50, 80, dates);
+                ], -50, 80, dates, edogCategories);
             }, 500);
 
             // Weekly SBSLeo Score Chart
             setTimeout(() => {
                 createLineChart('weeklySbsleoChart', [
                     { name: 'SBSLeo Score', class: 'diff', data: weeklySbsleoScores, unit: '', delay: 0 }
-                ], 0, 30, weeklyDates);
+                ], 0, 30, weeklyDates, prodCategories);
             }, 800);
 
             // Weekly Win Rate Difference Chart
@@ -945,7 +992,7 @@
                     { name: 'Fidelity Diff', class: 'clippy', data: weeklyFidelityDiff, unit: '%', delay: 0 },
                     { name: 'Aesthetics Diff', class: 'gamma', data: weeklyAestheticsDiff, unit: '%', delay: 300 },
                     { name: 'Consistency Diff', class: 'consistency', data: weeklyConsistencyDiff, unit: '%', delay: 600 }
-                ], -10, 60, weeklyDates);
+                ], -10, 60, weeklyDates, prodCategories);
             }, 1100);
         });
 
@@ -963,6 +1010,21 @@
             document.getElementById(`${dimension}Gamma`).addEventListener('input', () => calculateDiff(dimension));
         });
 
+        // Toggle Edog Category visibility based on Data Type selection
+        document.getElementById('dataType').addEventListener('change', function() {
+            const edogCategoryGroup = document.getElementById('edogCategory').closest('.form-group');
+            const prodCategoryGroup = document.getElementById('prodCategory').closest('.form-group');
+            if (this.value === 'edog') {
+                edogCategoryGroup.style.display = 'block';
+                prodCategoryGroup.style.display = 'none';
+                document.getElementById('prodCategory').value = '';
+            } else {
+                edogCategoryGroup.style.display = 'none';
+                prodCategoryGroup.style.display = 'block';
+                document.getElementById('edogCategory').value = '';
+            }
+        });
+
         // Form submission
         document.getElementById('dataEntryForm').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -971,6 +1033,8 @@
             const sbsleo = parseFloat(document.getElementById('sbsleoScore').value);
             const testCases = parseInt(document.getElementById('testCases').value);
             const dataType = document.getElementById('dataType').value;
+            const edogCategory = document.getElementById('edogCategory').value;
+            const prodCategory = document.getElementById('prodCategory').value;
             
             const fidelityClippy = parseFloat(document.getElementById('fidelityClippy').value);
             const fidelityGamma = parseFloat(document.getElementById('fidelityGamma').value);
@@ -994,6 +1058,7 @@
                 fidelityDiff.push(fidelityDiffValue);
                 aestheticsDiff.push(aestheticsDiffValue);
                 consistencyDiff.push(consistencyDiffValue);
+                edogCategories.push(edogCategory);
 
                 // Save to localStorage
                 localStorage.setItem('edogDates', JSON.stringify(dates));
@@ -1001,6 +1066,7 @@
                 localStorage.setItem('edogFidelity', JSON.stringify(fidelityDiff));
                 localStorage.setItem('edogAesthetics', JSON.stringify(aestheticsDiff));
                 localStorage.setItem('edogConsistency', JSON.stringify(consistencyDiff));
+                localStorage.setItem('edogCategories', JSON.stringify(edogCategories));
 
                 // Add row to hidden Edog table
                 const edogTable = document.getElementById('edogTable').querySelector('tbody');
@@ -1039,7 +1105,7 @@
                 setTimeout(() => {
                     createLineChart('sbsleoChart', [
                         { name: 'SBSLeo Score', class: 'diff', data: sbsleoScores, unit: '', delay: 0 }
-                    ], -20, 40, dates);
+                    ], -20, 40, dates, edogCategories);
                     updateDateLabels('sbsleoChartLabels', dates);
                 }, 100);
 
@@ -1048,7 +1114,7 @@
                         { name: 'Fidelity Diff', class: 'clippy', data: fidelityDiff, unit: '%', delay: 0 },
                         { name: 'Aesthetics Diff', class: 'gamma', data: aestheticsDiff, unit: '%', delay: 300 },
                         { name: 'Consistency Diff', class: 'consistency', data: consistencyDiff, unit: '%', delay: 600 }
-                    ], -50, 80, dates);
+                    ], -50, 80, dates, edogCategories);
                     updateDateLabels('winRateDiffChartLabels', dates);
                 }, 400);
 
@@ -1059,6 +1125,7 @@
                 weeklyFidelityDiff.push(fidelityDiffValue);
                 weeklyAestheticsDiff.push(aestheticsDiffValue);
                 weeklyConsistencyDiff.push(consistencyDiffValue);
+                prodCategories.push(prodCategory);
 
                 // Save to localStorage
                 localStorage.setItem('prodDates', JSON.stringify(weeklyDates));
@@ -1066,6 +1133,7 @@
                 localStorage.setItem('prodFidelity', JSON.stringify(weeklyFidelityDiff));
                 localStorage.setItem('prodAesthetics', JSON.stringify(weeklyAestheticsDiff));
                 localStorage.setItem('prodConsistency', JSON.stringify(weeklyConsistencyDiff));
+                localStorage.setItem('prodCategories', JSON.stringify(prodCategories));
 
                 // Add row to hidden PROD table
                 const prodTable = document.getElementById('prodTable').querySelector('tbody');
@@ -1104,7 +1172,7 @@
                 setTimeout(() => {
                     createLineChart('weeklySbsleoChart', [
                         { name: 'SBSLeo Score', class: 'diff', data: weeklySbsleoScores, unit: '', delay: 0 }
-                    ], 0, 40, weeklyDates);
+                    ], 0, 40, weeklyDates, prodCategories);
                     updateDateLabels('weeklySbsleoChartLabels', weeklyDates);
                 }, 100);
 
@@ -1113,7 +1181,7 @@
                         { name: 'Fidelity Diff', class: 'clippy', data: weeklyFidelityDiff, unit: '%', delay: 0 },
                         { name: 'Aesthetics Diff', class: 'gamma', data: weeklyAestheticsDiff, unit: '%', delay: 300 },
                         { name: 'Consistency Diff', class: 'consistency', data: weeklyConsistencyDiff, unit: '%', delay: 600 }
-                    ], -10, 70, weeklyDates);
+                    ], -10, 70, weeklyDates, prodCategories);
                     updateDateLabels('weeklyWinRateDiffChartLabels', weeklyDates);
                 }, 400);
             }
