@@ -1,704 +1,704 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clippy Evaluation</title>
-    <style>
-        :root {
-            --primary-color: #2563eb;
-            --secondary-color: #1e40af;
-            --success-color: #16a34a;
-            --warning-color: #d97706;
-            --danger-color: #dc2626;
-            --background-color: #f8fafc;
-            --card-background: #ffffff;
-            --text-primary: #1e293b;
-            --text-secondary: #64748b;
-            --border-color: #e2e8f0;
-            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-            --clippy-color: #3b82f6;
-            --gamma-color: #ef4444;
-            --tie-color: #64748b;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clippy Evaluation</title>
+<style>
+:root {
+--primary-color: #2563eb;
+--secondary-color: #1e40af;
+--success-color: #16a34a;
+--warning-color: #d97706;
+--danger-color: #dc2626;
+--background-color: #f8fafc;
+--card-background: #ffffff;
+--text-primary: #1e293b;
+--text-secondary: #64748b;
+--border-color: #e2e8f0;
+--shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+--clippy-color: #3b82f6;
+--gamma-color: #ef4444;
+--tie-color: #64748b;
+}
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+* {
+box-sizing: border-box;
+margin: 0;
+padding: 0;
+}
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--background-color);
-            color: var(--text-primary);
-            line-height: 1.5;
-        }
+body {
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+background-color: var(--background-color);
+color: var(--text-primary);
+line-height: 1.5;
+}
 
-        .dashboard-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
+.dashboard-container {
+max-width: 1400px;
+margin: 0 auto;
+padding: 2rem;
+}
 
-        .dashboard-header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
+.dashboard-header {
+text-align: center;
+margin-bottom: 2rem;
+}
 
-        .dashboard-title {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: var(--primary-color);
-            margin-bottom: 0.5rem;
-        }
+.dashboard-title {
+font-size: 2.5rem;
+font-weight: bold;
+color: var(--primary-color);
+margin-bottom: 0.5rem;
+}
 
-        .dashboard-subtitle {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-        }
+.dashboard-subtitle {
+font-size: 0.9rem;
+color: var(--text-secondary);
+}
 
-        .summary-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
+.summary-cards {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+gap: 1.5rem;
+margin-bottom: 2rem;
+}
 
-        .summary-card {
-            background: var(--card-background);
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border-color);
-            text-align: center;
-        }
+.summary-card {
+background: var(--card-background);
+border-radius: 12px;
+padding: 1.5rem;
+box-shadow: var(--shadow);
+border: 1px solid var(--border-color);
+text-align: center;
+}
 
-        .charts-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
+.charts-container {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 2rem;
+margin-bottom: 2rem;
+}
 
-        .chart-card {
-            background: var(--card-background);
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border-color);
-        }
+.chart-card {
+background: var(--card-background);
+border-radius: 12px;
+padding: 1.5rem;
+box-shadow: var(--shadow);
+border: 1px solid var(--border-color);
+}
 
-        .chart-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: var(--text-primary);
-        }
+.chart-title {
+font-size: 1.25rem;
+font-weight: 600;
+margin-bottom: 1rem;
+color: var(--text-primary);
+}
 
-        .line-chart-container {
-            position: relative;
-            height: 300px;
-            margin-bottom: 1rem;
-        }
+.line-chart-container {
+position: relative;
+height: 300px;
+margin-bottom: 1rem;
+}
 
-        .line-chart {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            border-left: 2px solid var(--border-color);
-            border-bottom: 2px solid var(--border-color);
-        }
+.line-chart {
+width: 100%;
+height: 100%;
+position: relative;
+border-left: 2px solid var(--border-color);
+border-bottom: 2px solid var(--border-color);
+}
 
-        .line-chart svg {
-            width: 100%;
-            height: 100%;
-            overflow: visible;
-        }
+.line-chart svg {
+width: 100%;
+height: 100%;
+overflow: visible;
+}
 
-        .line-path {
-            fill: none;
-            stroke-width: 3;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
+.line-path {
+fill: none;
+stroke-width: 3;
+stroke-linecap: round;
+stroke-linejoin: round;
+}
 
-        .line-path.clippy { stroke: var(--clippy-color); }
-        .line-path.gamma { stroke: var(--gamma-color); }
-        .line-path.diff { stroke: var(--success-color); }
-        .line-path.consistency { stroke: var(--warning-color); }
+.line-path.clippy { stroke: var(--clippy-color); }
+.line-path.gamma { stroke: var(--gamma-color); }
+.line-path.diff { stroke: var(--success-color); }
+.line-path.consistency { stroke: var(--warning-color); }
 
-        .line-point {
-            fill: white;
-            stroke-width: 3;
-            r: 5;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
+.line-point {
+fill: white;
+stroke-width: 3;
+r: 5;
+cursor: pointer;
+transition: all 0.3s ease;
+}
 
-        .line-point.clippy { stroke: var(--clippy-color); }
-        .line-point.gamma { stroke: var(--gamma-color); }
-        .line-point.diff { stroke: var(--success-color); }
-        .line-point.consistency { stroke: var(--warning-color); }
+.line-point.clippy { stroke: var(--clippy-color); }
+.line-point.gamma { stroke: var(--gamma-color); }
+.line-point.diff { stroke: var(--success-color); }
+.line-point.consistency { stroke: var(--warning-color); }
 
-        .line-point:hover {
-            r: 7;
-            stroke-width: 4;
-        }
+.line-point:hover {
+r: 7;
+stroke-width: 4;
+}
 
-        .data-label {
-            font-size: 10px;
-            font-weight: 700;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            text-anchor: middle;
-            dominant-baseline: middle;
-            fill: var(--text-primary);
-            pointer-events: none;
-        }
+.data-label {
+font-size: 10px;
+font-weight: 700;
+font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+text-anchor: middle;
+dominant-baseline: middle;
+fill: var(--text-primary);
+pointer-events: none;
+}
 
-        .data-label-background {
-            fill: rgba(255, 255, 255, 0.95);
-            stroke: rgba(59, 130, 246, 0.2);
-            stroke-width: 0.8;
-            rx: 4;
-            ry: 4;
-            pointer-events: none;
-        }
+.data-label-background {
+fill: rgba(255, 255, 255, 0.95);
+stroke: rgba(59, 130, 246, 0.2);
+stroke-width: 0.8;
+rx: 4;
+ry: 4;
+pointer-events: none;
+}
 
-        .chart-legend {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-top: 1.5rem;
-            flex-wrap: wrap;
-        }
+.chart-legend {
+display: flex;
+justify-content: center;
+gap: 2rem;
+margin-top: 1.5rem;
+flex-wrap: wrap;
+}
 
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.85rem;
-            margin: 0.25rem 0;
-        }
+.legend-item {
+display: flex;
+align-items: center;
+gap: 0.5rem;
+font-size: 0.85rem;
+margin: 0.25rem 0;
+}
 
-        .legend-color {
-            width: 16px;
-            height: 3px;
-            border-radius: 2px;
-        }
+.legend-color {
+width: 16px;
+height: 3px;
+border-radius: 2px;
+}
 
-        .legend-color.clippy { background: var(--clippy-color); }
-        .legend-color.gamma { background: var(--gamma-color); }
-        .legend-color.diff { background: var(--success-color); }
-        .legend-color.consistency { background: var(--warning-color); }
+.legend-color.clippy { background: var(--clippy-color); }
+.legend-color.gamma { background: var(--gamma-color); }
+.legend-color.diff { background: var(--success-color); }
+.legend-color.consistency { background: var(--warning-color); }
 
-        .chart-axis-labels {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 0.5rem;
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-        }
+.chart-axis-labels {
+display: flex;
+justify-content: space-between;
+margin-top: 0.5rem;
+font-size: 0.75rem;
+color: var(--text-secondary);
+}
 
-        .y-axis-label {
-            position: absolute;
-            left: -40px;
-            top: 50%;
-            transform: rotate(-90deg) translateY(50%);
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-        }
+.y-axis-label {
+position: absolute;
+left: -40px;
+top: 50%;
+transform: rotate(-90deg) translateY(50%);
+font-size: 0.75rem;
+color: var(--text-secondary);
+}
 
-        .data-table-container {
-            background: var(--card-background);
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border-color);
-            overflow-x: auto;
-            margin-bottom: 2rem;
-        }
+.data-table-container {
+background: var(--card-background);
+border-radius: 12px;
+padding: 1.5rem;
+box-shadow: var(--shadow);
+border: 1px solid var(--border-color);
+overflow-x: auto;
+margin-bottom: 2rem;
+}
 
-        .table-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: var(--text-primary);
-        }
+.table-title {
+font-size: 1.25rem;
+font-weight: 600;
+margin-bottom: 1rem;
+color: var(--text-primary);
+}
 
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.9rem;
-        }
+.data-table {
+width: 100%;
+border-collapse: collapse;
+font-size: 0.9rem;
+}
 
-        .data-table th {
-            background: var(--primary-color);
-            color: white;
-            padding: 0.75rem;
-            text-align: center;
-            font-weight: 600;
-            border: 1px solid var(--primary-color);
-        }
+.data-table th {
+background: var(--primary-color);
+color: white;
+padding: 0.75rem;
+text-align: center;
+font-weight: 600;
+border: 1px solid var(--primary-color);
+}
 
-        .data-table td {
-            padding: 0.75rem;
-            text-align: center;
-            border: 1px solid var(--border-color);
-        }
+.data-table td {
+padding: 0.75rem;
+text-align: center;
+border: 1px solid var(--border-color);
+}
 
-        .data-table tr:nth-child(even) {
-            background: #f8fafc;
-        }
+.data-table tr:nth-child(even) {
+background: #f8fafc;
+}
 
-        .data-table tr:hover {
-            background: #e2e8f0;
-        }
+.data-table tr:hover {
+background: #e2e8f0;
+}
 
-        .metric-name {
-            font-weight: 600;
-            text-align: left !important;
-            color: var(--text-primary);
-        }
+.metric-name {
+font-weight: 600;
+text-align: left !important;
+color: var(--text-primary);
+}
 
-        .highlight-best {
-            background: #dcfce7 !important;
-            color: var(--success-color);
-            font-weight: 600;
-        }
+.highlight-best {
+background: #dcfce7 !important;
+color: var(--success-color);
+font-weight: 600;
+}
 
-        .highlight-worst {
-            background: #fee2e2 !important;
-            color: var(--danger-color);
-            font-weight: 600;
-        }
+.highlight-worst {
+background: #fee2e2 !important;
+color: var(--danger-color);
+font-weight: 600;
+}
 
-        .full-width-chart {
-            grid-column: 1 / -1;
-        }
+.full-width-chart {
+grid-column: 1 / -1;
+}
 
-        @media (max-width: 768px) {
-            .dashboard-container { padding: 1rem; }
-            .dashboard-title { font-size: 2rem; }
-            .charts-container { grid-template-columns: 1fr; }
-            .summary-cards { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
-            .line-chart-container { height: 250px; }
-        }
+@media (max-width: 768px) {
+.dashboard-container { padding: 1rem; }
+.dashboard-title { font-size: 2rem; }
+.charts-container { grid-template-columns: 1fr; }
+.summary-cards { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+.line-chart-container { height: 250px; }
+}
 
-        .fade-in {
-            animation: fadeIn 0.5s ease-in;
-        }
+.fade-in {
+animation: fadeIn 0.5s ease-in;
+}
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+@keyframes fadeIn {
+from { opacity: 0; transform: translateY(20px); }
+to { opacity: 1; transform: translateY(0); }
+}
 
-        .data-entry-form {
-            background: #f8fafc;
-            padding: 1.5rem;
-            border-radius: 8px;
-            margin-top: 1rem;
-        }
+.data-entry-form {
+background: #f8fafc;
+padding: 1.5rem;
+border-radius: 8px;
+margin-top: 1rem;
+}
 
-        .form-section {
-            margin-bottom: 1.5rem;
-        }
+.form-section {
+margin-bottom: 1.5rem;
+}
 
-        .form-section-title {
-            font-size: 1rem;
-            font-weight: 600;
-            margin-bottom: 0.75rem;
-            color: var(--primary-color);
-            border-bottom: 2px solid var(--primary-color);
-            padding-bottom: 0.5rem;
-        }
+.form-section-title {
+font-size: 1rem;
+font-weight: 600;
+margin-bottom: 0.75rem;
+color: var(--primary-color);
+border-bottom: 2px solid var(--primary-color);
+padding-bottom: 0.5rem;
+}
 
-        .form-row {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-        }
+.form-row {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+gap: 1rem;
+}
 
-        .form-group {
-            display: flex;
-            flex-direction: column;
-        }
+.form-group {
+display: flex;
+flex-direction: column;
+}
 
-        .form-group label {
-            font-size: 0.85rem;
-            font-weight: 500;
-            margin-bottom: 0.25rem;
-            color: var(--text-primary);
-        }
+.form-group label {
+font-size: 0.85rem;
+font-weight: 500;
+margin-bottom: 0.25rem;
+color: var(--text-primary);
+}
 
-        .form-group input,
-        .form-group select {
-            padding: 0.5rem;
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            font-size: 0.9rem;
-            transition: border-color 0.2s;
-        }
+.form-group input,
+.form-group select {
+padding: 0.5rem;
+border: 1px solid var(--border-color);
+border-radius: 4px;
+font-size: 0.9rem;
+transition: border-color 0.2s;
+}
 
-        .form-group input:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: var(--primary-color);
-        }
+.form-group input:focus,
+.form-group select:focus {
+outline: none;
+border-color: var(--primary-color);
+}
 
-        .form-group input[readonly] {
-            background: #e2e8f0;
-            cursor: not-allowed;
-        }
+.form-group input[readonly] {
+background: #e2e8f0;
+cursor: not-allowed;
+}
 
-        .form-actions {
-            display: flex;
-            gap: 1rem;
-            justify-content: flex-start;
-            margin-top: 1.5rem;
-        }
+.form-actions {
+display: flex;
+gap: 1rem;
+justify-content: flex-start;
+margin-top: 1.5rem;
+}
 
-        .btn-primary,
-        .btn-secondary {
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
+.btn-primary,
+.btn-secondary {
+padding: 0.75rem 1.5rem;
+border: none;
+border-radius: 6px;
+font-size: 0.9rem;
+font-weight: 600;
+cursor: pointer;
+transition: all 0.2s;
+}
 
-        .btn-primary {
-            background: var(--primary-color);
-            color: white;
-        }
+.btn-primary {
+background: var(--primary-color);
+color: white;
+}
 
-        .btn-primary:hover {
-            background: var(--secondary-color);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow);
-        }
+.btn-primary:hover {
+background: var(--secondary-color);
+transform: translateY(-2px);
+box-shadow: var(--shadow);
+}
 
-        .btn-secondary {
-            background: var(--text-secondary);
-            color: white;
-        }
+.btn-secondary {
+background: var(--text-secondary);
+color: white;
+}
 
-        .btn-secondary:hover {
-            background: #475569;
-        }
+.btn-secondary:hover {
+background: #475569;
+}
 
-        .generated-code {
-            margin-top: 1.5rem;
-            padding: 1rem;
-            background: white;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-        }
+.generated-code {
+margin-top: 1.5rem;
+padding: 1rem;
+background: white;
+border: 1px solid var(--border-color);
+border-radius: 6px;
+}
 
-        .generated-code pre {
-            background: #1e293b;
-            color: #e2e8f0;
-            padding: 1rem;
-            border-radius: 4px;
-            overflow-x: auto;
-            font-size: 0.85rem;
-            line-height: 1.5;
-            margin: 0.5rem 0;
-        }
+.generated-code pre {
+background: #1e293b;
+color: #e2e8f0;
+padding: 1rem;
+border-radius: 4px;
+overflow-x: auto;
+font-size: 0.85rem;
+line-height: 1.5;
+margin: 0.5rem 0;
+}
 
-        .success-message {
-            margin-top: 1.5rem;
-            padding: 1rem;
-            background: #dcfce7;
-            border: 2px solid var(--success-color);
-            border-radius: 6px;
-            color: var(--success-color);
-        }
+.success-message {
+margin-top: 1.5rem;
+padding: 1rem;
+background: #dcfce7;
+border: 2px solid var(--success-color);
+border-radius: 6px;
+color: var(--success-color);
+}
 
-        .success-message h4 {
-            margin: 0 0 0.5rem 0;
-            font-size: 1.1rem;
-        }
+.success-message h4 {
+margin: 0 0 0.5rem 0;
+font-size: 1.1rem;
+}
 
-        .success-message p {
-            margin: 0;
-            font-size: 0.9rem;
-        }
-    </style>
+.success-message p {
+margin: 0;
+font-size: 0.9rem;
+}
+</style>
 </head>
 <body>
-    <div class="dashboard-container fade-in">
-        <div class="dashboard-header">
-            <h1 class="dashboard-title">Clippy Evaluation</h1>
-            <p class="dashboard-subtitle">SBSLeo Score: Range (-99 to +99) • Combined across all dimensions and segments. If the value is greater than 0, it indicates that Clippy performs better overall on this test set</p>
-            <p class="dashboard-subtitle">Win Rate Difference = Clippy Win Rate - Gamma Win Rate</p>
-            
-            <!-- Version Legend -->
-            <div style="margin-top: 1.5rem; padding: 1rem; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); display: inline-block;">
-                <div style="display: flex; gap: 2rem; align-items: center; font-size: 0.9rem;">
-                    <div style="font-weight: 600; color: var(--primary-color);">Product Version:</div>
-                    <div style="display: flex; align-items: center; gap: 0.5rem;">
-                        <svg width="20" height="20" style="vertical-align: middle;">
-                            <circle cx="10" cy="10" r="6" fill="white" stroke="#64748b" stroke-width="3"/>
-                        </svg>
-                        <span>V3.2</span>
-                    </div>
-                    <div style="display: flex; align-items: center; gap: 0.5rem;">
-                        <svg width="20" height="20" style="vertical-align: middle;">
-                            <rect x="4" y="4" width="12" height="12" fill="white" stroke="#64748b" stroke-width="3"/>
-                        </svg>
-                        <span>V3.3-V1</span>
-                    </div>
-                    <div style="display: flex; align-items: center; gap: 0.5rem;">
-                        <svg width="20" height="20" style="vertical-align: middle;">
-                            <polygon points="10,4 16,16 4,16" fill="white" stroke="#64748b" stroke-width="3"/>
-                        </svg>
-                        <span>V3.3-V2</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+<div class="dashboard-container fade-in">
+<div class="dashboard-header">
+<h1 class="dashboard-title">Clippy Evaluation</h1>
+<p class="dashboard-subtitle">SBSLeo Score: Range (-99 to +99) • Combined across all dimensions and segments. If the value is greater than 0, it indicates that Clippy performs better overall on this test set</p>
+<p class="dashboard-subtitle">Win Rate Difference = Clippy Win Rate - Gamma Win Rate</p>
 
-        <!-- Charts Section -->
-        <div class="charts-container">
-            <div class="chart-card">
-                <h3 class="chart-title">SBSLeo Score Trend (Edog)</h3>
-                <div class="line-chart-container">
-                    <div class="y-axis-label">Score</div>
-                    <div class="line-chart">
-                        <svg id="sbsleoChart"></svg>
-                    </div>
-                    <div id="sbsleoChartLabels" class="chart-axis-labels"></div>
-                </div>
-                <div class="chart-legend">
-                    <div class="legend-item">
-                        <div class="legend-color diff"></div>
-                        <span>SBSLeo Score</span>
-                    </div>
-                </div>
-            </div>
+<!-- Version Legend -->
+<div style="margin-top: 1.5rem; padding: 1rem; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); display: inline-block;">
+<div style="display: flex; gap: 2rem; align-items: center; font-size: 0.9rem;">
+<div style="font-weight: 600; color: var(--primary-color);">Product Version:</div>
+<div style="display: flex; align-items: center; gap: 0.5rem;">
+<svg width="20" height="20" style="vertical-align: middle;">
+<circle cx="10" cy="10" r="6" fill="white" stroke="#64748b" stroke-width="3"/>
+</svg>
+<span>V3.2</span>
+</div>
+<div style="display: flex; align-items: center; gap: 0.5rem;">
+<svg width="20" height="20" style="vertical-align: middle;">
+<rect x="4" y="4" width="12" height="12" fill="white" stroke="#64748b" stroke-width="3"/>
+</svg>
+<span>V3.3-V1</span>
+</div>
+<div style="display: flex; align-items: center; gap: 0.5rem;">
+<svg width="20" height="20" style="vertical-align: middle;">
+<polygon points="10,4 16,16 4,16" fill="white" stroke="#64748b" stroke-width="3"/>
+</svg>
+<span>V3.3-V2</span>
+</div>
+</div>
+</div>
+</div>
 
-            <div class="chart-card">
-                <h3 class="chart-title">Win Rate Difference Trends (Edog)</h3>
-                <div class="line-chart-container">
-                    <div class="y-axis-label">Difference (%)</div>
-                    <div class="line-chart">
-                        <svg id="winRateDiffChart"></svg>
-                    </div>
-                    <div id="winRateDiffChartLabels" class="chart-axis-labels"></div>
-                </div>
-                <div class="chart-legend">
-                    <div class="legend-item">
-                        <div class="legend-color clippy"></div>
-                        <span>Fidelity Diff</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-color gamma"></div>
-                        <span>Aesthetics Diff</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-color consistency"></div>
-                        <span>Consistency Diff</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+<!-- Charts Section -->
+<div class="charts-container">
+<div class="chart-card">
+<h3 class="chart-title">SBSLeo Score Trend (Edog)</h3>
+<div class="line-chart-container">
+<div class="y-axis-label">Score</div>
+<div class="line-chart">
+<svg id="sbsleoChart"></svg>
+</div>
+<div id="sbsleoChartLabels" class="chart-axis-labels"></div>
+</div>
+<div class="chart-legend">
+<div class="legend-item">
+<div class="legend-color diff"></div>
+<span>SBSLeo Score</span>
+</div>
+</div>
+</div>
 
-        <!-- Weekly Charts Section -->
-        <div class="charts-container">
-            <div class="chart-card">
-                <h3 class="chart-title">SBSLeo Score Trend (PROD)</h3>
-                <div class="line-chart-container">
-                    <div class="y-axis-label">Score</div>
-                    <div class="line-chart">
-                        <svg id="weeklySbsleoChart"></svg>
-                    </div>
-                    <div id="weeklySbsleoChartLabels" class="chart-axis-labels"></div>
-                </div>
-                <div class="chart-legend">
-                    <div class="legend-item">
-                        <div class="legend-color diff"></div>
-                        <span>SBSLeo Score</span>
-                    </div>
-                </div>
-            </div>
+<div class="chart-card">
+<h3 class="chart-title">Win Rate Difference Trends (Edog)</h3>
+<div class="line-chart-container">
+<div class="y-axis-label">Difference (%)</div>
+<div class="line-chart">
+<svg id="winRateDiffChart"></svg>
+</div>
+<div id="winRateDiffChartLabels" class="chart-axis-labels"></div>
+</div>
+<div class="chart-legend">
+<div class="legend-item">
+<div class="legend-color clippy"></div>
+<span>Fidelity Diff</span>
+</div>
+<div class="legend-item">
+<div class="legend-color gamma"></div>
+<span>Aesthetics Diff</span>
+</div>
+<div class="legend-item">
+<div class="legend-color consistency"></div>
+<span>Consistency Diff</span>
+</div>
+</div>
+</div>
+</div>
 
-            <div class="chart-card">
-                <h3 class="chart-title">Win Rate Difference Trends (PROD)</h3>
-                <div class="line-chart-container">
-                    <div class="y-axis-label">Difference (%)</div>
-                    <div class="line-chart">
-                        <svg id="weeklyWinRateDiffChart"></svg>
-                    </div>
-                    <div id="weeklyWinRateDiffChartLabels" class="chart-axis-labels"></div>
-                </div>
-                <div class="chart-legend">
-                    <div class="legend-item">
-                        <div class="legend-color clippy"></div>
-                        <span>Fidelity Diff</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-color gamma"></div>
-                        <span>Aesthetics Diff</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-color consistency"></div>
-                        <span>Consistency Diff</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+<!-- Weekly Charts Section -->
+<div class="charts-container">
+<div class="chart-card">
+<h3 class="chart-title">SBSLeo Score Trend (PROD)</h3>
+<div class="line-chart-container">
+<div class="y-axis-label">Score</div>
+<div class="line-chart">
+<svg id="weeklySbsleoChart"></svg>
+</div>
+<div id="weeklySbsleoChartLabels" class="chart-axis-labels"></div>
+</div>
+<div class="chart-legend">
+<div class="legend-item">
+<div class="legend-color diff"></div>
+<span>SBSLeo Score</span>
+</div>
+</div>
+</div>
 
-        <!-- Hidden Data Tables for storage -->
-        <div style="display: none;">
-            <!-- Edog Table -->
-            <table class="data-table" id="edogTable">
-                <tbody></tbody>
-            </table>
-            
-            <!-- PROD Table -->
-            <table class="data-table" id="prodTable">
-                <tbody></tbody>
-            </table>
-        </div>
+<div class="chart-card">
+<h3 class="chart-title">Win Rate Difference Trends (PROD)</h3>
+<div class="line-chart-container">
+<div class="y-axis-label">Difference (%)</div>
+<div class="line-chart">
+<svg id="weeklyWinRateDiffChart"></svg>
+</div>
+<div id="weeklyWinRateDiffChartLabels" class="chart-axis-labels"></div>
+</div>
+<div class="chart-legend">
+<div class="legend-item">
+<div class="legend-color clippy"></div>
+<span>Fidelity Diff</span>
+</div>
+<div class="legend-item">
+<div class="legend-color gamma"></div>
+<span>Aesthetics Diff</span>
+</div>
+<div class="legend-item">
+<div class="legend-color consistency"></div>
+<span>Consistency Diff</span>
+</div>
+</div>
+</div>
+</div>
 
-        <!--  Entry Form -->
-        <div class="data-table-container">
-            <h3 class="table-title">Add New Data Entry</h3>
-            <form id="dataEntryForm" class="data-entry-form">
-                <div class="form-section">
-                    <h4 class="form-section-title">Basic Information</h4>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="entryDate">Date:</label>
-                            <input type="text" id="entryDate" placeholder="e.g., 12/10" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="sbsleoScore">SBSLeo Score:</label>
-                            <input type="number" step="0.01" id="sbsleoScore" placeholder="e.g., 30.55" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="testCases">Test Cases:</label>
-                            <input type="number" id="testCases" placeholder="e.g., 94" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="dataType">Data Type:</label>
-                            <select id="dataType" required>
-                                <option value="edog">Edog (Daily)</option>
-                                <option value="prod">PROD (Weekly)</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="prodCategory">Product Version:</label>
-                            <select id="prodCategory">
-                                <option value="">N/A</option>
-                                <option value="v3.3-v1">V3.3-V1</option>
-                                <option value="v3.3-v2">V3.3-V2</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
+<!-- Hidden Data Tables for storage -->
+<div style="display: none;">
+<!-- Edog Table -->
+<table class="data-table" id="edogTable">
+<tbody></tbody>
+</table>
 
-                <div class="form-section">
-                    <h4 class="form-section-title">Fidelity</h4>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="fidelityClippy">Clippy (%):</label>
-                            <input type="number" step="0.1" id="fidelityClippy" placeholder="e.g., 79.8" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="fidelityGamma">Gamma (%):</label>
-                            <input type="number" step="0.1" id="fidelityGamma" placeholder="e.g., 16.0" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="fidelityTie">Tie (%):</label>
-                            <input type="number" step="0.1" id="fidelityTie" placeholder="e.g., 4.3" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="fidelityDiff">Win Rate Diff (%):</label>
-                            <input type="number" step="0.1" id="fidelityDiff" placeholder="Auto-calculated" readonly>
-                        </div>
-                    </div>
-                </div>
+<!-- PROD Table -->
+<table class="data-table" id="prodTable">
+<tbody></tbody>
+</table>
+</div>
 
-                <div class="form-section">
-                    <h4 class="form-section-title">Aesthetics</h4>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="aestheticsClippy">Clippy (%):</label>
-                            <input type="number" step="0.1" id="aestheticsClippy" placeholder="e.g., 60.6" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="aestheticsGamma">Gamma (%):</label>
-                            <input type="number" step="0.1" id="aestheticsGamma" placeholder="e.g., 30.9" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="aestheticsTie">Tie (%):</label>
-                            <input type="number" step="0.1" id="aestheticsTie" placeholder="e.g., 8.5" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="aestheticsDiff">Win Rate Diff (%):</label>
-                            <input type="number" step="0.1" id="aestheticsDiff" placeholder="Auto-calculated" readonly>
-                        </div>
-                    </div>
-                </div>
+<!--  Entry Form -->
+<div class="data-table-container">
+<h3 class="table-title">Add New Data Entry</h3>
+<form id="dataEntryForm" class="data-entry-form">
+<div class="form-section">
+<h4 class="form-section-title">Basic Information</h4>
+<div class="form-row">
+<div class="form-group">
+<label for="entryDate">Date:</label>
+<input type="text" id="entryDate" placeholder="e.g., 12/10" required>
+</div>
+<div class="form-group">
+<label for="sbsleoScore">SBSLeo Score:</label>
+<input type="number" step="0.01" id="sbsleoScore" placeholder="e.g., 30.55" required>
+</div>
+<div class="form-group">
+<label for="testCases">Test Cases:</label>
+<input type="number" id="testCases" placeholder="e.g., 94" required>
+</div>
+<div class="form-group">
+<label for="dataType">Data Type:</label>
+<select id="dataType" required>
+<option value="edog">Edog (Daily)</option>
+<option value="prod">PROD (Weekly)</option>
+</select>
+</div>
+<div class="form-group">
+<label for="prodCategory">Product Version:</label>
+<select id="prodCategory">
+<option value="">N/A</option>
+<option value="v3.3-v1">V3.3-V1</option>
+<option value="v3.3-v2">V3.3-V2</option>
+</select>
+</div>
+</div>
+</div>
 
-                <div class="form-section">
-                    <h4 class="form-section-title">Consistency</h4>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="consistencyClippy">Clippy (%):</label>
-                            <input type="number" step="0.1" id="consistencyClippy" placeholder="e.g., 29.8" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="consistencyGamma">Gamma (%):</label>
-                            <input type="number" step="0.1" id="consistencyGamma" placeholder="e.g., 17.0" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="consistencyTie">Tie (%):</label>
-                            <input type="number" step="0.1" id="consistencyTie" placeholder="e.g., 53.2" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="consistencyDiff">Win Rate Diff (%):</label>
-                            <input type="number" step="0.1" id="consistencyDiff" placeholder="Auto-calculated" readonly>
-                        </div>
-                    </div>
-                </div>
+<div class="form-section">
+<h4 class="form-section-title">Fidelity</h4>
+<div class="form-row">
+<div class="form-group">
+<label for="fidelityClippy">Clippy (%):</label>
+<input type="number" step="0.1" id="fidelityClippy" placeholder="e.g., 79.8" required>
+</div>
+<div class="form-group">
+<label for="fidelityGamma">Gamma (%):</label>
+<input type="number" step="0.1" id="fidelityGamma" placeholder="e.g., 16.0" required>
+</div>
+<div class="form-group">
+<label for="fidelityTie">Tie (%):</label>
+<input type="number" step="0.1" id="fidelityTie" placeholder="e.g., 4.3" required>
+</div>
+<div class="form-group">
+<label for="fidelityDiff">Win Rate Diff (%):</label>
+<input type="number" step="0.1" id="fidelityDiff" placeholder="Auto-calculated" readonly>
+</div>
+</div>
+</div>
 
-                <div class="form-actions">
-                    <button type="submit" class="btn-primary">Add Data & Update Charts</button>
-                    <button type="button" class="btn-secondary" onclick="document.getElementById('dataEntryForm').reset();">Clear Form</button>
-                </div>
-            </form>
+<div class="form-section">
+<h4 class="form-section-title">Aesthetics</h4>
+<div class="form-row">
+<div class="form-group">
+<label for="aestheticsClippy">Clippy (%):</label>
+<input type="number" step="0.1" id="aestheticsClippy" placeholder="e.g., 60.6" required>
+</div>
+<div class="form-group">
+<label for="aestheticsGamma">Gamma (%):</label>
+<input type="number" step="0.1" id="aestheticsGamma" placeholder="e.g., 30.9" required>
+</div>
+<div class="form-group">
+<label for="aestheticsTie">Tie (%):</label>
+<input type="number" step="0.1" id="aestheticsTie" placeholder="e.g., 8.5" required>
+</div>
+<div class="form-group">
+<label for="aestheticsDiff">Win Rate Diff (%):</label>
+<input type="number" step="0.1" id="aestheticsDiff" placeholder="Auto-calculated" readonly>
+</div>
+</div>
+</div>
 
-            <div id="successMessage" class="success-message" style="display: none;">
-                <h4>✓ Data Added Successfully!</h4>
-                <p>The table and charts have been updated with the new data.</p>
-            </div>
-            
-            <!-- Debug Tools -->
-            <div style="margin-top: 20px; padding: 15px; background: #f0f0f0; border-radius: 8px;">
-                <h4 style="margin: 0 0 10px 0;">🔧 Debug Tools</h4>
-                <button id="showEdogBtn" style="padding: 8px 15px; margin-right: 10px; background: #3b82f6; color: white; border: none; border-radius: 4px; cursor: pointer;">Show Edog Data</button>
-                <button id="showProdBtn" style="padding: 8px 15px; margin-right: 10px; background: #10b981; color: white; border: none; border-radius: 4px; cursor: pointer;">Show PROD Data</button>
-                <button id="exportDataBtn" style="padding: 8px 15px; margin-right: 10px; background: #8b5cf6; color: white; border: none; border-radius: 4px; cursor: pointer;">Export Data for Git</button>
-                <button id="clearDataBtn" style="padding: 8px 15px; background: #ef4444; color: white; border: none; border-radius: 4px; cursor: pointer;">Clear All Data</button>
-                <div id="exportOutput" style="margin-top: 15px; padding: 10px; background: white; border-radius: 4px; font-family: monospace; font-size: 12px; max-height: 300px; overflow-y: auto; display: none;"></div>
-            </div>
-        </div>
-    </div>
+<div class="form-section">
+<h4 class="form-section-title">Consistency</h4>
+<div class="form-row">
+<div class="form-group">
+<label for="consistencyClippy">Clippy (%):</label>
+<input type="number" step="0.1" id="consistencyClippy" placeholder="e.g., 29.8" required>
+</div>
+<div class="form-group">
+<label for="consistencyGamma">Gamma (%):</label>
+<input type="number" step="0.1" id="consistencyGamma" placeholder="e.g., 17.0" required>
+</div>
+<div class="form-group">
+<label for="consistencyTie">Tie (%):</label>
+<input type="number" step="0.1" id="consistencyTie" placeholder="e.g., 53.2" required>
+</div>
+<div class="form-group">
+<label for="consistencyDiff">Win Rate Diff (%):</label>
+<input type="number" step="0.1" id="consistencyDiff" placeholder="Auto-calculated" readonly>
+</div>
+</div>
+</div>
 
-    <script>
+<div class="form-actions">
+<button type="submit" class="btn-primary">Add Data & Update Charts</button>
+<button type="button" class="btn-secondary" onclick="document.getElementById('dataEntryForm').reset();">Clear Form</button>
+</div>
+</form>
+
+<div id="successMessage" class="success-message" style="display: none;">
+<h4>✓ Data Added Successfully!</h4>
+<p>The table and charts have been updated with the new data.</p>
+</div>
+
+<!-- Debug Tools -->
+<div style="margin-top: 20px; padding: 15px; background: #f0f0f0; border-radius: 8px;">
+<h4 style="margin: 0 0 10px 0;">🔧 Debug Tools</h4>
+<button id="showEdogBtn" style="padding: 8px 15px; margin-right: 10px; background: #3b82f6; color: white; border: none; border-radius: 4px; cursor: pointer;">Show Edog Data</button>
+<button id="showProdBtn" style="padding: 8px 15px; margin-right: 10px; background: #10b981; color: white; border: none; border-radius: 4px; cursor: pointer;">Show PROD Data</button>
+<button id="exportDataBtn" style="padding: 8px 15px; margin-right: 10px; background: #8b5cf6; color: white; border: none; border-radius: 4px; cursor: pointer;">Export Data for Git</button>
+<button id="clearDataBtn" style="padding: 8px 15px; background: #ef4444; color: white; border: none; border-radius: 4px; cursor: pointer;">Clear All Data</button>
+<div id="exportOutput" style="margin-top: 15px; padding: 10px; background: white; border-radius: 4px; font-family: monospace; font-size: 12px; max-height: 300px; overflow-y: auto; display: none;"></div>
+</div>
+</div>
+</div>
+
+<script>
         // Load data from localStorage or use default values
-        const defaultDates = ["11/12","11/13","11/14","11/17","11/19","11/20","11/24","11/25","11/26","11/27","11/28","12/1","12/2","12/3","12/4","12/9","12/11","12/16","12/17","12/22","12/25","12/26","12/29","12/30","1/2","1/4","1/6","1/7","1/8","1/10","1/12","1/13"];
-        const defaultSbsleoScores = [-16.76,25.43,20.2,-8.31,20.43,19.59,9.19,31.33,6.77,26.82,18.69,24.99,23.13,26.53,26.67,34.53,26.05,40.45,24.28,28.39,27.04,17.48,21.21,12.02,23.64,5.49,39.73,40.42,26.1,34.6,36.86,26];
-        const defaultFidelityDiff = [-15.3,71.4,40,37.5,62,42.9,0,44,3.9,51.9,25,30.8,36,53,0,23,15.4,28,22.2,28.6,36,51.3,42.3,33.4,48.2,53.8,74,77,69.6,28.6,57.8,28];
-        const defaultAestheticsDiff = [0,14.2,40,-25,33.4,28.6,21.8,52,30.8,33.4,17.8,30.8,24,23.5,64.2,69.2,53.8,84,50,21.4,28,8.7,26.9,42.8,11.2,-23,30.4,61.6,13.1,78.6,55.6,28];
-        const defaultConsistencyDiff = [-38.5,0,20,-37.5,-14.3,-9.5,-4.3,12,-27,3.7,10.7,53.8,-4,-5.9,42.8,53.8,38.4,64,5.6,64.2,44,8.7,-23.1,-23.8,11.2,-15.4,56.6,46.2,4.4,35.8,40,36];
-        const defaultEdogCategories = ["","","","","","","","","","","","","","","","","","","","","","","v3.3-v2","v3.3-v2","v3.3-v2","v3.3-v2","v3.3-v2","v3.3-v2","v3.3-v1","v3.3-v1","v3.3-v2","v3.3-v1"];
+        const defaultDates = ["11/12","11/13","11/14","11/17","11/19","11/20","11/24","11/25","11/26","11/27","11/28","12/1","12/2","12/3","12/4","12/9","12/11","12/16","12/17","12/22","12/25","12/26","12/29","12/30","1/2","1/4","1/6","1/7","1/8","1/10","1/12","1/13","1/14","1/15","1/16","1/19"];
+        const defaultSbsleoScores = [-16.76,25.43,20.2,-8.31,20.43,19.59,9.19,31.33,6.77,26.82,18.69,24.99,23.13,26.53,26.67,34.53,26.05,40.45,24.28,28.39,27.04,17.48,21.21,12.02,23.64,5.49,39.73,40.42,26.1,34.6,36.86,26,33.4,34.46,23.41,23.29];
+        const defaultFidelityDiff = [-15.3,71.4,40,37.5,62,42.9,0,44,3.9,51.9,25,30.8,36,53,0,23,15.4,28,22.2,28.6,36,51.3,42.3,33.4,48.2,53.8,74,77,69.6,28.6,57.8,28,61.6,46.2,43.8,15.4];
+        const defaultAestheticsDiff = [0,14.2,40,-25,33.4,28.6,21.8,52,30.8,33.4,17.8,30.8,24,23.5,64.2,69.2,53.8,84,50,21.4,28,8.7,26.9,42.8,11.2,-23,30.4,61.6,13.1,78.6,55.6,28,23,53.8,33.4,61.6];
+        const defaultConsistencyDiff = [-38.5,0,20,-37.5,-14.3,-9.5,-4.3,12,-27,3.7,10.7,53.8,-4,-5.9,42.8,53.8,38.4,64,5.6,64.2,44,8.7,-23.1,-23.8,11.2,-15.4,56.6,46.2,4.4,35.8,40,36,38.4,53.8,18.6,30.8];
+        const defaultEdogCategories = ["","","","","","","","","","","","","","","","","","","","","","","v3.3-v2","v3.3-v2","v3.3-v2","v3.3-v2","v3.3-v2","v3.3-v2","v3.3-v1","v3.3-v1","v3.3-v2","v3.3-v1","v3.3-v2","v3.3-v1","v3.3-v1","v3.3-v1"];
         
         let dates = JSON.parse(localStorage.getItem('edogDates')) || [...defaultDates];
         let sbsleoScores = JSON.parse(localStorage.getItem('edogScores')) || [...defaultSbsleoScores];
@@ -708,529 +708,529 @@
         let edogCategories = JSON.parse(localStorage.getItem('edogCategories')) || [...defaultEdogCategories];
 
         // Weekly data
-        const defaultWeeklyDates = ["11/16","11/23","11/30","12/7","12/14","12/20","1/3","1/10","1/10"];
-        const defaultWeeklySbsleoScores = [13.25,27.24,24.56,30.55,31.67,29.7,21.23,22.32,22.3];
-        const defaultWeeklyFidelityDiff = [42.8,50,40.9,63.8,69.5,44.3,59,54.9,54.9];
-        const defaultWeeklyAestheticsDiff = [-3.3,25.3,29.6,29.7,46.4,42.3,6.4,27,26.9];
-        const defaultWeeklyConsistencyDiff = [3.3,17.5,15.9,12.8,17.9,19.5,1.3,5.4,5.4];
+        const defaultWeeklyDates = ["11/16","11/23","11/30","12/7","12/14","12/20","1/3","1/10","1/17"];
+        const defaultWeeklySbsleoScores = [13.25,27.24,24.56,30.55,31.67,29.7,21.23,22.32,26.44];
+        const defaultWeeklyFidelityDiff = [42.8,50,40.9,63.8,69.5,44.3,59,54.9,14];
+        const defaultWeeklyAestheticsDiff = [-3.3,25.3,29.6,29.7,46.4,42.3,6.4,27,47.5];
+        const defaultWeeklyConsistencyDiff = [3.3,17.5,15.9,12.8,17.9,19.5,1.3,5.4,47.5];
+        const defaultProdCategories = ["v3.3-v1","v3.3-v1"];
         
         let weeklyDates = JSON.parse(localStorage.getItem('prodDates')) || [...defaultWeeklyDates];
         let weeklySbsleoScores = JSON.parse(localStorage.getItem('prodScores')) || [...defaultWeeklySbsleoScores];
         let weeklyFidelityDiff = JSON.parse(localStorage.getItem('prodFidelity')) || [...defaultWeeklyFidelityDiff];
         let weeklyAestheticsDiff = JSON.parse(localStorage.getItem('prodAesthetics')) || [...defaultWeeklyAestheticsDiff];
         let weeklyConsistencyDiff = JSON.parse(localStorage.getItem('prodConsistency')) || [...defaultWeeklyConsistencyDiff];
-        const defaultProdCategories = ["v3.3-v1"];
         let prodCategories = JSON.parse(localStorage.getItem('prodCategories')) || [...defaultProdCategories];
 
-        // Function to update date labels dynamically
-        function updateDateLabels(labelContainerId, datesArray) {
-            const container = document.getElementById(labelContainerId);
-            if (!container) return;
-            
-            container.innerHTML = '';
-            
-            // Determine step based on array length to avoid overcrowding
-            let step = 1;
-            if (datesArray.length > 20) {
-                step = 4; // Show every 4th date
-            } else if (datesArray.length > 15) {
-                step = 3; // Show every 3rd date
-            } else if (datesArray.length > 10) {
-                step = 2; // Show every 2nd date
-            }
-            
-            datesArray.forEach((date, index) => {
-                const span = document.createElement('span');
-                // Show dates at intervals, always show first and last date
-                if (index === 0 || index === datesArray.length - 1 || index % step === 0) {
-                    span.textContent = date;
-                } else {
-                    // Empty span to maintain spacing
-                    span.textContent = '';
-                }
-                container.appendChild(span);
-            });
-        }
+// Function to update date labels dynamically
+function updateDateLabels(labelContainerId, datesArray) {
+const container = document.getElementById(labelContainerId);
+if (!container) return;
 
-        function createLineChart(svgId, datasets, yMin = null, yMax = null, chartDates = null, categoryArray = null) {
-            const svg = document.getElementById(svgId);
-            const rect = svg.getBoundingClientRect();
-            const width = rect.width || 400;
-            const height = rect.height || 250;
-            const padding = { top: 30, right: 20, bottom: 20, left: 50 };
-            
-            // Clear existing content
-            svg.innerHTML = '';
-            
-            // Calculate y-axis range
-            let allValues = [];
-            datasets.forEach(dataset => allValues = allValues.concat(dataset.data));
-            const dataMin = yMin !== null ? yMin : Math.min(...allValues);
-            const dataMax = yMax !== null ? yMax : Math.max(...allValues);
-            const range = dataMax - dataMin;
-            const yAxisMin = yMin !== null ? yMin : (dataMin - range * 0.1);
-            const yAxisMax = yMax !== null ? yMax : (dataMax + range * 0.1);
-            
-            // Use provided dates or default dates
-            const useDates = chartDates || dates;
-            
-            // Create scales
-            const xScale = (width - padding.left - padding.right) / (useDates.length - 1);
-            const yScale = (height - padding.top - padding.bottom) / (yAxisMax - yAxisMin);
-            
-            // Draw y-axis labels and grid lines
-            const gridGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-            gridGroup.setAttribute('opacity', '0.1');
-            
-            // Horizontal grid lines
-            for (let i = 0; i <= 5; i++) {
-                const y = padding.top + (i * (height - padding.top - padding.bottom) / 5);
-                const value = yAxisMax - (i * (yAxisMax - yAxisMin) / 5);
-                
-                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-                line.setAttribute('x1', padding.left);
-                line.setAttribute('y1', y);
-                line.setAttribute('x2', width - padding.right);
-                line.setAttribute('y2', y);
-                line.setAttribute('stroke', '#64748b');
-                line.setAttribute('stroke-width', '1');
-                gridGroup.appendChild(line);
-                
-                const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-                label.setAttribute('x', padding.left - 8);
-                label.setAttribute('y', y + 3);
-                label.setAttribute('text-anchor', 'end');
-                label.setAttribute('font-size', '10px');
-                label.setAttribute('font-family', 'Segoe UI, system-ui, sans-serif');
-                label.setAttribute('fill', '#64748b');
-                label.textContent = value.toFixed(1);
-                svg.appendChild(label);
-            }
-            
-            svg.appendChild(gridGroup);
-            
-            // Draw zero line for diff charts
-            if (yAxisMin < 0 && yAxisMax > 0) {
-                const zeroY = height - padding.bottom - (0 - yAxisMin) * yScale;
-                const zeroLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-                zeroLine.setAttribute('x1', padding.left);
-                zeroLine.setAttribute('y1', zeroY);
-                zeroLine.setAttribute('x2', width - padding.right);
-                zeroLine.setAttribute('y2', zeroY);
-                zeroLine.setAttribute('stroke', '#dc2626');
-                zeroLine.setAttribute('stroke-width', '2');
-                zeroLine.setAttribute('stroke-dasharray', '5,5');
-                zeroLine.setAttribute('opacity', '0.7');
-                svg.appendChild(zeroLine);
-            }
-            
-            // Draw lines and points for each dataset
-            datasets.forEach(dataset => {
-                // Create path
-                const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-                let pathData = '';
-                
-                dataset.data.forEach((value, i) => {
-                    const x = padding.left + i * xScale;
-                    const y = height - padding.bottom - (value - yAxisMin) * yScale;
-                    
-                    if (i === 0) {
-                        pathData += `M ${x} ${y}`;
-                    } else {
-                        pathData += ` L ${x} ${y}`;
-                    }
-                });
-                
-                path.setAttribute('d', pathData);
-                path.setAttribute('class', `line-path ${dataset.class}`);
-                path.setAttribute('opacity', '0');
-                svg.appendChild(path);
-                
-                // Animate line
-                setTimeout(() => {
-                    path.style.transition = 'opacity 1s ease';
-                    path.style.opacity = '1';
-                }, dataset.delay || 0);
-                
-                // Create points with data labels
-                dataset.data.forEach((value, i) => {
-                    const x = padding.left + i * xScale;
-                    const y = height - padding.bottom - (value - yAxisMin) * yScale;
-                    // Create data label
-                    const labelText = `${value}${dataset.unit || ''}`;
-                    const textWidth = labelText.length * 6;
-                    const textHeight = 12;
-                    const labelY = y - 15;
-                    const labelBg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-                    labelBg.setAttribute('x', x - textWidth / 2);
-                    labelBg.setAttribute('y', labelY - textHeight / 2);
-                    labelBg.setAttribute('width', textWidth);
-                    labelBg.setAttribute('height', textHeight);
-                    labelBg.setAttribute('class', 'data-label-background');
-                    labelBg.setAttribute('opacity', '0');
-                    svg.appendChild(labelBg);
-                    const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-                    label.setAttribute('x', x);
-                    label.setAttribute('y', labelY);
-                    label.setAttribute('class', 'data-label');
-                    label.setAttribute('opacity', '0');
-                    label.textContent = labelText;
-                    svg.appendChild(label);
-                    
-                    // 判断使用什么形状
-                    let pointElement;
-                    let shapeType = 'circle'; // 默认圆形
-                    
-                    // 如果提供了category数组，根据category决定形状
-                    if (categoryArray && categoryArray[i]) {
-                        if (categoryArray[i] === 'v3.3-v1') {
-                            shapeType = 'square';
-                        } else if (categoryArray[i] === 'v3.3-v2') {
-                            shapeType = 'triangle';
-                        }
-                    } else {
-                        // 没有category信息时，使用旧的日期判断逻辑（仅用于向后兼容）
-                        if (useDates[i]) {
-                            const d = useDates[i];
-                            const parts = d.split('/');
-                            if (parts.length === 2) {
-                                const month = parseInt(parts[0], 10);
-                                const day = parseInt(parts[1], 10);
-                                // 12月9日及之后，或者1月及以后的数据都是v3.3
-                                if (month === 1 || (month === 12 && day >= 9)) {
-                                    shapeType = 'square';
-                                }
-                            }
-                        }
-                    }
-                    
-                    if (shapeType === 'square') {
-                        // 正方形
-                        pointElement = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-                        const size = 10;
-                        pointElement.setAttribute('x', x - size / 2);
-                        pointElement.setAttribute('y', y - size / 2);
-                        pointElement.setAttribute('width', size);
-                        pointElement.setAttribute('height', size);
-                        pointElement.setAttribute('class', `line-point ${dataset.class}`);
-                    } else if (shapeType === 'triangle') {
-                        // 三角形
-                        pointElement = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
-                        const size = 11;
-                        const points = `${x},${y - size/2} ${x - size/2},${y + size/2} ${x + size/2},${y + size/2}`;
-                        pointElement.setAttribute('points', points);
-                        pointElement.setAttribute('class', `line-point ${dataset.class}`);
-                    } else {
-                        // 圆形（默认）
-                        pointElement = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-                        pointElement.setAttribute('cx', x);
-                        pointElement.setAttribute('cy', y);
-                        pointElement.setAttribute('class', `line-point ${dataset.class}`);
-                    }
-                    
-                    pointElement.setAttribute('opacity', '0');
-                    pointElement.style.cursor = 'pointer';
-                    const title = document.createElementNS('http://www.w3.org/2000/svg', 'title');
-                    title.textContent = `${dataset.name}: ${value}${dataset.unit || ''} (${useDates[i]})`;
-                    pointElement.appendChild(title);
-                    svg.appendChild(pointElement);
-                    // Animate elements
-                    const pointDelay = (dataset.delay || 0) + i * 100;
-                    setTimeout(() => {
-                        labelBg.style.transition = 'opacity 0.5s ease';
-                        labelBg.style.opacity = '0.9';
-                        label.style.transition = 'opacity 0.5s ease';
-                        label.style.opacity = '1';
-                        pointElement.style.transition = 'opacity 0.5s ease';
-                        pointElement.style.opacity = '1';
-                    }, pointDelay);
-                });
-            });
-        }
+container.innerHTML = '';
 
-        // Initialize charts when DOM is loaded
-        document.addEventListener('DOMContentLoaded', function() {
-            // Update date labels
-            updateDateLabels('sbsleoChartLabels', dates);
-            updateDateLabels('winRateDiffChartLabels', dates);
-            updateDateLabels('weeklySbsleoChartLabels', weeklyDates);
-            updateDateLabels('weeklyWinRateDiffChartLabels', weeklyDates);
-            
-            // SBSLeo Score Chart
-            setTimeout(() => {
-                createLineChart('sbsleoChart', [
-                    { name: 'SBSLeo Score', class: 'diff', data: sbsleoScores, unit: '', delay: 0 }
-                ], -20, 35, dates, edogCategories);
-            }, 200);
+// Determine step based on array length to avoid overcrowding
+let step = 1;
+if (datesArray.length > 20) {
+step = 4; // Show every 4th date
+} else if (datesArray.length > 15) {
+step = 3; // Show every 3rd date
+} else if (datesArray.length > 10) {
+step = 2; // Show every 2nd date
+}
 
-            // Win Rate Difference Chart
-            setTimeout(() => {
-                createLineChart('winRateDiffChart', [
-                    { name: 'Fidelity Diff', class: 'clippy', data: fidelityDiff, unit: '%', delay: 0 },
-                    { name: 'Aesthetics Diff', class: 'gamma', data: aestheticsDiff, unit: '%', delay: 300 },
-                    { name: 'Consistency Diff', class: 'consistency', data: consistencyDiff, unit: '%', delay: 600 }
-                ], -50, 80, dates, edogCategories);
-            }, 500);
+datesArray.forEach((date, index) => {
+const span = document.createElement('span');
+// Show dates at intervals, always show first and last date
+if (index === 0 || index === datesArray.length - 1 || index % step === 0) {
+span.textContent = date;
+} else {
+// Empty span to maintain spacing
+span.textContent = '';
+}
+container.appendChild(span);
+});
+}
 
-            // Weekly SBSLeo Score Chart
-            setTimeout(() => {
-                createLineChart('weeklySbsleoChart', [
-                    { name: 'SBSLeo Score', class: 'diff', data: weeklySbsleoScores, unit: '', delay: 0 }
-                ], 0, 30, weeklyDates, prodCategories);
-            }, 800);
+function createLineChart(svgId, datasets, yMin = null, yMax = null, chartDates = null, categoryArray = null) {
+const svg = document.getElementById(svgId);
+const rect = svg.getBoundingClientRect();
+const width = rect.width || 400;
+const height = rect.height || 250;
+const padding = { top: 30, right: 20, bottom: 20, left: 50 };
 
-            // Weekly Win Rate Difference Chart
-            setTimeout(() => {
-                createLineChart('weeklyWinRateDiffChart', [
-                    { name: 'Fidelity Diff', class: 'clippy', data: weeklyFidelityDiff, unit: '%', delay: 0 },
-                    { name: 'Aesthetics Diff', class: 'gamma', data: weeklyAestheticsDiff, unit: '%', delay: 300 },
-                    { name: 'Consistency Diff', class: 'consistency', data: weeklyConsistencyDiff, unit: '%', delay: 600 }
-                ], -10, 60, weeklyDates, prodCategories);
-            }, 1100);
-        });
+// Clear existing content
+svg.innerHTML = '';
 
-        // Auto-calculate Win Rate Diff
-        function calculateDiff(dimension) {
-            const clippy = parseFloat(document.getElementById(`${dimension}Clippy`).value) || 0;
-            const gamma = parseFloat(document.getElementById(`${dimension}Gamma`).value) || 0;
-            const diff = clippy - gamma;
-            document.getElementById(`${dimension}Diff`).value = diff.toFixed(1);
-        }
+// Calculate y-axis range
+let allValues = [];
+datasets.forEach(dataset => allValues = allValues.concat(dataset.data));
+const dataMin = yMin !== null ? yMin : Math.min(...allValues);
+const dataMax = yMax !== null ? yMax : Math.max(...allValues);
+const range = dataMax - dataMin;
+const yAxisMin = yMin !== null ? yMin : (dataMin - range * 0.1);
+const yAxisMax = yMax !== null ? yMax : (dataMax + range * 0.1);
 
-        // Add event listeners for auto-calculation
-        ['fidelity', 'aesthetics', 'consistency'].forEach(dimension => {
-            document.getElementById(`${dimension}Clippy`).addEventListener('input', () => calculateDiff(dimension));
-            document.getElementById(`${dimension}Gamma`).addEventListener('input', () => calculateDiff(dimension));
-        });
+// Use provided dates or default dates
+const useDates = chartDates || dates;
 
-        // Product Version is always visible - no need to toggle
+// Create scales
+const xScale = (width - padding.left - padding.right) / (useDates.length - 1);
+const yScale = (height - padding.top - padding.bottom) / (yAxisMax - yAxisMin);
 
-        // Form submission
-        document.getElementById('dataEntryForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const date = document.getElementById('entryDate').value;
-            const sbsleo = parseFloat(document.getElementById('sbsleoScore').value);
-            const testCases = parseInt(document.getElementById('testCases').value);
-            const dataType = document.getElementById('dataType').value;
-            const prodCategory = document.getElementById('prodCategory').value;
-            
-            const fidelityClippy = parseFloat(document.getElementById('fidelityClippy').value);
-            const fidelityGamma = parseFloat(document.getElementById('fidelityGamma').value);
-            const fidelityTie = parseFloat(document.getElementById('fidelityTie').value);
-            const fidelityDiffValue = parseFloat(document.getElementById('fidelityDiff').value);
-            
-            const aestheticsClippy = parseFloat(document.getElementById('aestheticsClippy').value);
-            const aestheticsGamma = parseFloat(document.getElementById('aestheticsGamma').value);
-            const aestheticsTie = parseFloat(document.getElementById('aestheticsTie').value);
-            const aestheticsDiffValue = parseFloat(document.getElementById('aestheticsDiff').value);
-            
-            const consistencyClippy = parseFloat(document.getElementById('consistencyClippy').value);
-            const consistencyGamma = parseFloat(document.getElementById('consistencyGamma').value);
-            const consistencyTie = parseFloat(document.getElementById('consistencyTie').value);
-            const consistencyDiffValue = parseFloat(document.getElementById('consistencyDiff').value);
+// Draw y-axis labels and grid lines
+const gridGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+gridGroup.setAttribute('opacity', '0.1');
 
-            if (dataType === 'edog') {
-                // Add to daily data
-                dates.push(date);
-                sbsleoScores.push(sbsleo);
-                fidelityDiff.push(fidelityDiffValue);
-                aestheticsDiff.push(aestheticsDiffValue);
-                consistencyDiff.push(consistencyDiffValue);
-                edogCategories.push(prodCategory);
+// Horizontal grid lines
+for (let i = 0; i <= 5; i++) {
+const y = padding.top + (i * (height - padding.top - padding.bottom) / 5);
+const value = yAxisMax - (i * (yAxisMax - yAxisMin) / 5);
 
-                // Save to localStorage
-                localStorage.setItem('edogDates', JSON.stringify(dates));
-                localStorage.setItem('edogScores', JSON.stringify(sbsleoScores));
-                localStorage.setItem('edogFidelity', JSON.stringify(fidelityDiff));
-                localStorage.setItem('edogAesthetics', JSON.stringify(aestheticsDiff));
-                localStorage.setItem('edogConsistency', JSON.stringify(consistencyDiff));
-                localStorage.setItem('edogCategories', JSON.stringify(edogCategories));
+const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+line.setAttribute('x1', padding.left);
+line.setAttribute('y1', y);
+line.setAttribute('x2', width - padding.right);
+line.setAttribute('y2', y);
+line.setAttribute('stroke', '#64748b');
+line.setAttribute('stroke-width', '1');
+gridGroup.appendChild(line);
 
-                // Add row to hidden Edog table
-                const edogTable = document.getElementById('edogTable').querySelector('tbody');
-                const newRow = `
-                    <tr>
-                        <td rowspan="3" class="metric-name">${date}</td>
-                        <td rowspan="3">${sbsleo}</td>
-                        <td rowspan="3">${testCases}</td>
-                        <td class="metric-name">Fidelity</td>
-                        <td>${fidelityClippy}%</td>
-                        <td>${fidelityGamma}%</td>
-                        <td>${fidelityTie}%</td>
-                        <td>${fidelityDiffValue}%</td>
-                    </tr>
-                    <tr>
-                        <td class="metric-name">Aesthetics</td>
-                        <td>${aestheticsClippy}%</td>
-                        <td>${aestheticsGamma}%</td>
-                        <td>${aestheticsTie}%</td>
-                        <td>${aestheticsDiffValue}%</td>
-                    </tr>
-                    <tr>
-                        <td class="metric-name">Consistency</td>
-                        <td>${consistencyClippy}%</td>
-                        <td>${consistencyGamma}%</td>
-                        <td>${consistencyTie}%</td>
-                        <td>${consistencyDiffValue}%</td>
-                    </tr>
-                `;
-                edogTable.insertAdjacentHTML('beforeend', newRow);
+const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+label.setAttribute('x', padding.left - 8);
+label.setAttribute('y', y + 3);
+label.setAttribute('text-anchor', 'end');
+label.setAttribute('font-size', '10px');
+label.setAttribute('font-family', 'Segoe UI, system-ui, sans-serif');
+label.setAttribute('fill', '#64748b');
+label.textContent = value.toFixed(1);
+svg.appendChild(label);
+}
 
-                // Update daily charts
-                document.getElementById('sbsleoChart').innerHTML = '';
-                document.getElementById('winRateDiffChart').innerHTML = '';
-                
-                setTimeout(() => {
-                    createLineChart('sbsleoChart', [
-                        { name: 'SBSLeo Score', class: 'diff', data: sbsleoScores, unit: '', delay: 0 }
-                    ], -20, 40, dates, edogCategories);
-                    updateDateLabels('sbsleoChartLabels', dates);
-                }, 100);
+svg.appendChild(gridGroup);
 
-                setTimeout(() => {
-                    createLineChart('winRateDiffChart', [
-                        { name: 'Fidelity Diff', class: 'clippy', data: fidelityDiff, unit: '%', delay: 0 },
-                        { name: 'Aesthetics Diff', class: 'gamma', data: aestheticsDiff, unit: '%', delay: 300 },
-                        { name: 'Consistency Diff', class: 'consistency', data: consistencyDiff, unit: '%', delay: 600 }
-                    ], -50, 80, dates, edogCategories);
-                    updateDateLabels('winRateDiffChartLabels', dates);
-                }, 400);
+// Draw zero line for diff charts
+if (yAxisMin < 0 && yAxisMax > 0) {
+const zeroY = height - padding.bottom - (0 - yAxisMin) * yScale;
+const zeroLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+zeroLine.setAttribute('x1', padding.left);
+zeroLine.setAttribute('y1', zeroY);
+zeroLine.setAttribute('x2', width - padding.right);
+zeroLine.setAttribute('y2', zeroY);
+zeroLine.setAttribute('stroke', '#dc2626');
+zeroLine.setAttribute('stroke-width', '2');
+zeroLine.setAttribute('stroke-dasharray', '5,5');
+zeroLine.setAttribute('opacity', '0.7');
+svg.appendChild(zeroLine);
+}
 
-            } else {
-                // Add to weekly data
-                weeklyDates.push(date);
-                weeklySbsleoScores.push(sbsleo);
-                weeklyFidelityDiff.push(fidelityDiffValue);
-                weeklyAestheticsDiff.push(aestheticsDiffValue);
-                weeklyConsistencyDiff.push(consistencyDiffValue);
-                prodCategories.push(prodCategory);
+// Draw lines and points for each dataset
+datasets.forEach(dataset => {
+// Create path
+const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+let pathData = '';
 
-                // Save to localStorage
-                localStorage.setItem('prodDates', JSON.stringify(weeklyDates));
-                localStorage.setItem('prodScores', JSON.stringify(weeklySbsleoScores));
-                localStorage.setItem('prodFidelity', JSON.stringify(weeklyFidelityDiff));
-                localStorage.setItem('prodAesthetics', JSON.stringify(weeklyAestheticsDiff));
-                localStorage.setItem('prodConsistency', JSON.stringify(weeklyConsistencyDiff));
-                localStorage.setItem('prodCategories', JSON.stringify(prodCategories));
+dataset.data.forEach((value, i) => {
+const x = padding.left + i * xScale;
+const y = height - padding.bottom - (value - yAxisMin) * yScale;
 
-                // Add row to hidden PROD table
-                const prodTable = document.getElementById('prodTable').querySelector('tbody');
-                const newRow = `
-                    <tr>
-                        <td rowspan="3" class="metric-name">${date}</td>
-                        <td rowspan="3">${sbsleo}</td>
-                        <td rowspan="3">${testCases}</td>
-                        <td class="metric-name">Fidelity</td>
-                        <td>${fidelityClippy}%</td>
-                        <td>${fidelityGamma}%</td>
-                        <td>${fidelityTie}%</td>
-                        <td>${fidelityDiffValue}%</td>
-                    </tr>
-                    <tr>
-                        <td class="metric-name">Aesthetics</td>
-                        <td>${aestheticsClippy}%</td>
-                        <td>${aestheticsGamma}%</td>
-                        <td>${aestheticsTie}%</td>
-                        <td>${aestheticsDiffValue}%</td>
-                    </tr>
-                    <tr>
-                        <td class="metric-name">Consistency</td>
-                        <td>${consistencyClippy}%</td>
-                        <td>${consistencyGamma}%</td>
-                        <td>${consistencyTie}%</td>
-                        <td>${consistencyDiffValue}%</td>
-                    </tr>
-                `;
-                prodTable.insertAdjacentHTML('beforeend', newRow);
+if (i === 0) {
+pathData += `M ${x} ${y}`;
+} else {
+pathData += ` L ${x} ${y}`;
+}
+});
 
-                // Update weekly charts
-                document.getElementById('weeklySbsleoChart').innerHTML = '';
-                document.getElementById('weeklyWinRateDiffChart').innerHTML = '';
-                
-                setTimeout(() => {
-                    createLineChart('weeklySbsleoChart', [
-                        { name: 'SBSLeo Score', class: 'diff', data: weeklySbsleoScores, unit: '', delay: 0 }
-                    ], 0, 40, weeklyDates, prodCategories);
-                    updateDateLabels('weeklySbsleoChartLabels', weeklyDates);
-                }, 100);
+path.setAttribute('d', pathData);
+path.setAttribute('class', `line-path ${dataset.class}`);
+path.setAttribute('opacity', '0');
+svg.appendChild(path);
 
-                setTimeout(() => {
-                    createLineChart('weeklyWinRateDiffChart', [
-                        { name: 'Fidelity Diff', class: 'clippy', data: weeklyFidelityDiff, unit: '%', delay: 0 },
-                        { name: 'Aesthetics Diff', class: 'gamma', data: weeklyAestheticsDiff, unit: '%', delay: 300 },
-                        { name: 'Consistency Diff', class: 'consistency', data: weeklyConsistencyDiff, unit: '%', delay: 600 }
-                    ], -10, 70, weeklyDates, prodCategories);
-                    updateDateLabels('weeklyWinRateDiffChartLabels', weeklyDates);
-                }, 400);
-            }
+// Animate line
+setTimeout(() => {
+path.style.transition = 'opacity 1s ease';
+path.style.opacity = '1';
+}, dataset.delay || 0);
 
-            // Show success message
-            document.getElementById('successMessage').style.display = 'block';
-            
-            // Wait for charts to finish rendering before scrolling
-            setTimeout(() => {
-                // Scroll to charts area
-                const chartsSection = document.querySelector('.container');
-                chartsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                
-                // Add a visual highlight to show charts updated
-                const charts = document.querySelectorAll('.data-table-container');
-                charts.forEach(chart => {
-                    chart.style.transition = 'all 0.3s ease';
-                    chart.style.transform = 'scale(1.02)';
-                    chart.style.boxShadow = '0 0 20px rgba(59, 130, 246, 0.5)';
-                    setTimeout(() => {
-                        chart.style.transform = 'scale(1)';
-                        chart.style.boxShadow = '';
-                    }, 1000);
-                });
-            }, 1500); // Wait for chart animations to complete
-            
-            // Reset form and hide success message after 5 seconds
-            setTimeout(() => {
-                document.getElementById('dataEntryForm').reset();
-                setTimeout(() => {
-                    document.getElementById('successMessage').style.display = 'none';
-                }, 2000);
-            }, 3000);
-        });
+// Create points with data labels
+dataset.data.forEach((value, i) => {
+const x = padding.left + i * xScale;
+const y = height - padding.bottom - (value - yAxisMin) * yScale;
+// Create data label
+const labelText = `${value}${dataset.unit || ''}`;
+const textWidth = labelText.length * 6;
+const textHeight = 12;
+const labelY = y - 15;
+const labelBg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+labelBg.setAttribute('x', x - textWidth / 2);
+labelBg.setAttribute('y', labelY - textHeight / 2);
+labelBg.setAttribute('width', textWidth);
+labelBg.setAttribute('height', textHeight);
+labelBg.setAttribute('class', 'data-label-background');
+labelBg.setAttribute('opacity', '0');
+svg.appendChild(labelBg);
+const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+label.setAttribute('x', x);
+label.setAttribute('y', labelY);
+label.setAttribute('class', 'data-label');
+label.setAttribute('opacity', '0');
+label.textContent = labelText;
+svg.appendChild(label);
 
-        function copyToClipboard() {
-            const codeOutput = document.getElementById('codeOutput').textContent;
-            navigator.clipboard.writeText(codeOutput).then(() => {
-                alert('Code copied to clipboard!');
-            }).catch(err => {
-                console.error('Failed to copy: ', err);
-            });
-        }
+// 判断使用什么形状
+let pointElement;
+let shapeType = 'circle'; // 默认圆形
 
-        // Debug button event listeners
-        document.getElementById('showEdogBtn').addEventListener('click', function() {
-            console.log('=== Edog (Daily) Data ===');
-            console.log('Dates:', dates);
-            console.log('SBSLeo Scores:', sbsleoScores);
-            console.log('Fidelity Diff:', fidelityDiff);
-            console.log('Aesthetics Diff:', aestheticsDiff);
-            console.log('Consistency Diff:', consistencyDiff);
-            console.log('Total entries:', dates.length);
-            alert('Edog data logged to console (F12). Total entries: ' + dates.length);
-        });
+// 如果提供了category数组，根据category决定形状
+if (categoryArray && categoryArray[i]) {
+if (categoryArray[i] === 'v3.3-v1') {
+shapeType = 'square';
+} else if (categoryArray[i] === 'v3.3-v2') {
+shapeType = 'triangle';
+}
+} else {
+// 没有category信息时，使用旧的日期判断逻辑（仅用于向后兼容）
+if (useDates[i]) {
+const d = useDates[i];
+const parts = d.split('/');
+if (parts.length === 2) {
+const month = parseInt(parts[0], 10);
+const day = parseInt(parts[1], 10);
+// 12月9日及之后，或者1月及以后的数据都是v3.3
+if (month === 1 || (month === 12 && day >= 9)) {
+shapeType = 'square';
+}
+}
+}
+}
 
-        document.getElementById('showProdBtn').addEventListener('click', function() {
-            console.log('=== PROD (Weekly) Data ===');
-            console.log('Dates:', weeklyDates);
-            console.log('SBSLeo Scores:', weeklySbsleoScores);
-            console.log('Fidelity Diff:', weeklyFidelityDiff);
-            console.log('Aesthetics Diff:', weeklyAestheticsDiff);
-            console.log('Consistency Diff:', weeklyConsistencyDiff);
-            console.log('Total entries:', weeklyDates.length);
-            alert('PROD data logged to console (F12). Total entries: ' + weeklyDates.length);
-        });
+if (shapeType === 'square') {
+// 正方形
+pointElement = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+const size = 10;
+pointElement.setAttribute('x', x - size / 2);
+pointElement.setAttribute('y', y - size / 2);
+pointElement.setAttribute('width', size);
+pointElement.setAttribute('height', size);
+pointElement.setAttribute('class', `line-point ${dataset.class}`);
+} else if (shapeType === 'triangle') {
+// 三角形
+pointElement = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+const size = 11;
+const points = `${x},${y - size/2} ${x - size/2},${y + size/2} ${x + size/2},${y + size/2}`;
+pointElement.setAttribute('points', points);
+pointElement.setAttribute('class', `line-point ${dataset.class}`);
+} else {
+// 圆形（默认）
+pointElement = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+pointElement.setAttribute('cx', x);
+pointElement.setAttribute('cy', y);
+pointElement.setAttribute('class', `line-point ${dataset.class}`);
+}
 
-        document.getElementById('exportDataBtn').addEventListener('click', function() {
-            const output = document.getElementById('exportOutput');
-            const exportData = `EDOG Daily Data:
+pointElement.setAttribute('opacity', '0');
+pointElement.style.cursor = 'pointer';
+const title = document.createElementNS('http://www.w3.org/2000/svg', 'title');
+title.textContent = `${dataset.name}: ${value}${dataset.unit || ''} (${useDates[i]})`;
+pointElement.appendChild(title);
+svg.appendChild(pointElement);
+// Animate elements
+const pointDelay = (dataset.delay || 0) + i * 100;
+setTimeout(() => {
+labelBg.style.transition = 'opacity 0.5s ease';
+labelBg.style.opacity = '0.9';
+label.style.transition = 'opacity 0.5s ease';
+label.style.opacity = '1';
+pointElement.style.transition = 'opacity 0.5s ease';
+pointElement.style.opacity = '1';
+}, pointDelay);
+});
+});
+}
+
+// Initialize charts when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+// Update date labels
+updateDateLabels('sbsleoChartLabels', dates);
+updateDateLabels('winRateDiffChartLabels', dates);
+updateDateLabels('weeklySbsleoChartLabels', weeklyDates);
+updateDateLabels('weeklyWinRateDiffChartLabels', weeklyDates);
+
+// SBSLeo Score Chart
+setTimeout(() => {
+createLineChart('sbsleoChart', [
+{ name: 'SBSLeo Score', class: 'diff', data: sbsleoScores, unit: '', delay: 0 }
+], -20, 35, dates, edogCategories);
+}, 200);
+
+// Win Rate Difference Chart
+setTimeout(() => {
+createLineChart('winRateDiffChart', [
+{ name: 'Fidelity Diff', class: 'clippy', data: fidelityDiff, unit: '%', delay: 0 },
+{ name: 'Aesthetics Diff', class: 'gamma', data: aestheticsDiff, unit: '%', delay: 300 },
+{ name: 'Consistency Diff', class: 'consistency', data: consistencyDiff, unit: '%', delay: 600 }
+], -50, 80, dates, edogCategories);
+}, 500);
+
+// Weekly SBSLeo Score Chart
+setTimeout(() => {
+createLineChart('weeklySbsleoChart', [
+{ name: 'SBSLeo Score', class: 'diff', data: weeklySbsleoScores, unit: '', delay: 0 }
+], 0, 30, weeklyDates, prodCategories);
+}, 800);
+
+// Weekly Win Rate Difference Chart
+setTimeout(() => {
+createLineChart('weeklyWinRateDiffChart', [
+{ name: 'Fidelity Diff', class: 'clippy', data: weeklyFidelityDiff, unit: '%', delay: 0 },
+{ name: 'Aesthetics Diff', class: 'gamma', data: weeklyAestheticsDiff, unit: '%', delay: 300 },
+{ name: 'Consistency Diff', class: 'consistency', data: weeklyConsistencyDiff, unit: '%', delay: 600 }
+], -10, 60, weeklyDates, prodCategories);
+}, 1100);
+});
+
+// Auto-calculate Win Rate Diff
+function calculateDiff(dimension) {
+const clippy = parseFloat(document.getElementById(`${dimension}Clippy`).value) || 0;
+const gamma = parseFloat(document.getElementById(`${dimension}Gamma`).value) || 0;
+const diff = clippy - gamma;
+document.getElementById(`${dimension}Diff`).value = diff.toFixed(1);
+}
+
+// Add event listeners for auto-calculation
+['fidelity', 'aesthetics', 'consistency'].forEach(dimension => {
+document.getElementById(`${dimension}Clippy`).addEventListener('input', () => calculateDiff(dimension));
+document.getElementById(`${dimension}Gamma`).addEventListener('input', () => calculateDiff(dimension));
+});
+
+// Product Version is always visible - no need to toggle
+
+// Form submission
+document.getElementById('dataEntryForm').addEventListener('submit', function(e) {
+e.preventDefault();
+
+const date = document.getElementById('entryDate').value;
+const sbsleo = parseFloat(document.getElementById('sbsleoScore').value);
+const testCases = parseInt(document.getElementById('testCases').value);
+const dataType = document.getElementById('dataType').value;
+const prodCategory = document.getElementById('prodCategory').value;
+
+const fidelityClippy = parseFloat(document.getElementById('fidelityClippy').value);
+const fidelityGamma = parseFloat(document.getElementById('fidelityGamma').value);
+const fidelityTie = parseFloat(document.getElementById('fidelityTie').value);
+const fidelityDiffValue = parseFloat(document.getElementById('fidelityDiff').value);
+
+const aestheticsClippy = parseFloat(document.getElementById('aestheticsClippy').value);
+const aestheticsGamma = parseFloat(document.getElementById('aestheticsGamma').value);
+const aestheticsTie = parseFloat(document.getElementById('aestheticsTie').value);
+const aestheticsDiffValue = parseFloat(document.getElementById('aestheticsDiff').value);
+
+const consistencyClippy = parseFloat(document.getElementById('consistencyClippy').value);
+const consistencyGamma = parseFloat(document.getElementById('consistencyGamma').value);
+const consistencyTie = parseFloat(document.getElementById('consistencyTie').value);
+const consistencyDiffValue = parseFloat(document.getElementById('consistencyDiff').value);
+
+if (dataType === 'edog') {
+// Add to daily data
+dates.push(date);
+sbsleoScores.push(sbsleo);
+fidelityDiff.push(fidelityDiffValue);
+aestheticsDiff.push(aestheticsDiffValue);
+consistencyDiff.push(consistencyDiffValue);
+edogCategories.push(prodCategory);
+
+// Save to localStorage
+localStorage.setItem('edogDates', JSON.stringify(dates));
+localStorage.setItem('edogScores', JSON.stringify(sbsleoScores));
+localStorage.setItem('edogFidelity', JSON.stringify(fidelityDiff));
+localStorage.setItem('edogAesthetics', JSON.stringify(aestheticsDiff));
+localStorage.setItem('edogConsistency', JSON.stringify(consistencyDiff));
+localStorage.setItem('edogCategories', JSON.stringify(edogCategories));
+
+// Add row to hidden Edog table
+const edogTable = document.getElementById('edogTable').querySelector('tbody');
+const newRow = `
+                   <tr>
+                       <td rowspan="3" class="metric-name">${date}</td>
+                       <td rowspan="3">${sbsleo}</td>
+                       <td rowspan="3">${testCases}</td>
+                       <td class="metric-name">Fidelity</td>
+                       <td>${fidelityClippy}%</td>
+                       <td>${fidelityGamma}%</td>
+                       <td>${fidelityTie}%</td>
+                       <td>${fidelityDiffValue}%</td>
+                   </tr>
+                   <tr>
+                       <td class="metric-name">Aesthetics</td>
+                       <td>${aestheticsClippy}%</td>
+                       <td>${aestheticsGamma}%</td>
+                       <td>${aestheticsTie}%</td>
+                       <td>${aestheticsDiffValue}%</td>
+                   </tr>
+                   <tr>
+                       <td class="metric-name">Consistency</td>
+                       <td>${consistencyClippy}%</td>
+                       <td>${consistencyGamma}%</td>
+                       <td>${consistencyTie}%</td>
+                       <td>${consistencyDiffValue}%</td>
+                   </tr>
+               `;
+edogTable.insertAdjacentHTML('beforeend', newRow);
+
+// Update daily charts
+document.getElementById('sbsleoChart').innerHTML = '';
+document.getElementById('winRateDiffChart').innerHTML = '';
+
+setTimeout(() => {
+createLineChart('sbsleoChart', [
+{ name: 'SBSLeo Score', class: 'diff', data: sbsleoScores, unit: '', delay: 0 }
+], -20, 40, dates, edogCategories);
+updateDateLabels('sbsleoChartLabels', dates);
+}, 100);
+
+setTimeout(() => {
+createLineChart('winRateDiffChart', [
+{ name: 'Fidelity Diff', class: 'clippy', data: fidelityDiff, unit: '%', delay: 0 },
+{ name: 'Aesthetics Diff', class: 'gamma', data: aestheticsDiff, unit: '%', delay: 300 },
+{ name: 'Consistency Diff', class: 'consistency', data: consistencyDiff, unit: '%', delay: 600 }
+], -50, 80, dates, edogCategories);
+updateDateLabels('winRateDiffChartLabels', dates);
+}, 400);
+
+} else {
+// Add to weekly data
+weeklyDates.push(date);
+weeklySbsleoScores.push(sbsleo);
+weeklyFidelityDiff.push(fidelityDiffValue);
+weeklyAestheticsDiff.push(aestheticsDiffValue);
+weeklyConsistencyDiff.push(consistencyDiffValue);
+prodCategories.push(prodCategory);
+
+// Save to localStorage
+localStorage.setItem('prodDates', JSON.stringify(weeklyDates));
+localStorage.setItem('prodScores', JSON.stringify(weeklySbsleoScores));
+localStorage.setItem('prodFidelity', JSON.stringify(weeklyFidelityDiff));
+localStorage.setItem('prodAesthetics', JSON.stringify(weeklyAestheticsDiff));
+localStorage.setItem('prodConsistency', JSON.stringify(weeklyConsistencyDiff));
+localStorage.setItem('prodCategories', JSON.stringify(prodCategories));
+
+// Add row to hidden PROD table
+const prodTable = document.getElementById('prodTable').querySelector('tbody');
+const newRow = `
+                   <tr>
+                       <td rowspan="3" class="metric-name">${date}</td>
+                       <td rowspan="3">${sbsleo}</td>
+                       <td rowspan="3">${testCases}</td>
+                       <td class="metric-name">Fidelity</td>
+                       <td>${fidelityClippy}%</td>
+                       <td>${fidelityGamma}%</td>
+                       <td>${fidelityTie}%</td>
+                       <td>${fidelityDiffValue}%</td>
+                   </tr>
+                   <tr>
+                       <td class="metric-name">Aesthetics</td>
+                       <td>${aestheticsClippy}%</td>
+                       <td>${aestheticsGamma}%</td>
+                       <td>${aestheticsTie}%</td>
+                       <td>${aestheticsDiffValue}%</td>
+                   </tr>
+                   <tr>
+                       <td class="metric-name">Consistency</td>
+                       <td>${consistencyClippy}%</td>
+                       <td>${consistencyGamma}%</td>
+                       <td>${consistencyTie}%</td>
+                       <td>${consistencyDiffValue}%</td>
+                   </tr>
+               `;
+prodTable.insertAdjacentHTML('beforeend', newRow);
+
+// Update weekly charts
+document.getElementById('weeklySbsleoChart').innerHTML = '';
+document.getElementById('weeklyWinRateDiffChart').innerHTML = '';
+
+setTimeout(() => {
+createLineChart('weeklySbsleoChart', [
+{ name: 'SBSLeo Score', class: 'diff', data: weeklySbsleoScores, unit: '', delay: 0 }
+], 0, 40, weeklyDates, prodCategories);
+updateDateLabels('weeklySbsleoChartLabels', weeklyDates);
+}, 100);
+
+setTimeout(() => {
+createLineChart('weeklyWinRateDiffChart', [
+{ name: 'Fidelity Diff', class: 'clippy', data: weeklyFidelityDiff, unit: '%', delay: 0 },
+{ name: 'Aesthetics Diff', class: 'gamma', data: weeklyAestheticsDiff, unit: '%', delay: 300 },
+{ name: 'Consistency Diff', class: 'consistency', data: weeklyConsistencyDiff, unit: '%', delay: 600 }
+], -10, 70, weeklyDates, prodCategories);
+updateDateLabels('weeklyWinRateDiffChartLabels', weeklyDates);
+}, 400);
+}
+
+// Show success message
+document.getElementById('successMessage').style.display = 'block';
+
+// Wait for charts to finish rendering before scrolling
+setTimeout(() => {
+// Scroll to charts area
+const chartsSection = document.querySelector('.container');
+chartsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+// Add a visual highlight to show charts updated
+const charts = document.querySelectorAll('.data-table-container');
+charts.forEach(chart => {
+chart.style.transition = 'all 0.3s ease';
+chart.style.transform = 'scale(1.02)';
+chart.style.boxShadow = '0 0 20px rgba(59, 130, 246, 0.5)';
+setTimeout(() => {
+chart.style.transform = 'scale(1)';
+chart.style.boxShadow = '';
+}, 1000);
+});
+}, 1500); // Wait for chart animations to complete
+
+// Reset form and hide success message after 5 seconds
+setTimeout(() => {
+document.getElementById('dataEntryForm').reset();
+setTimeout(() => {
+document.getElementById('successMessage').style.display = 'none';
+}, 2000);
+}, 3000);
+});
+
+function copyToClipboard() {
+const codeOutput = document.getElementById('codeOutput').textContent;
+navigator.clipboard.writeText(codeOutput).then(() => {
+alert('Code copied to clipboard!');
+}).catch(err => {
+console.error('Failed to copy: ', err);
+});
+}
+
+// Debug button event listeners
+document.getElementById('showEdogBtn').addEventListener('click', function() {
+console.log('=== Edog (Daily) Data ===');
+console.log('Dates:', dates);
+console.log('SBSLeo Scores:', sbsleoScores);
+console.log('Fidelity Diff:', fidelityDiff);
+console.log('Aesthetics Diff:', aestheticsDiff);
+console.log('Consistency Diff:', consistencyDiff);
+console.log('Total entries:', dates.length);
+alert('Edog data logged to console (F12). Total entries: ' + dates.length);
+});
+
+document.getElementById('showProdBtn').addEventListener('click', function() {
+console.log('=== PROD (Weekly) Data ===');
+console.log('Dates:', weeklyDates);
+console.log('SBSLeo Scores:', weeklySbsleoScores);
+console.log('Fidelity Diff:', weeklyFidelityDiff);
+console.log('Aesthetics Diff:', weeklyAestheticsDiff);
+console.log('Consistency Diff:', weeklyConsistencyDiff);
+console.log('Total entries:', weeklyDates.length);
+alert('PROD data logged to console (F12). Total entries: ' + weeklyDates.length);
+});
+
+document.getElementById('exportDataBtn').addEventListener('click', function() {
+const output = document.getElementById('exportOutput');
+const exportData = `EDOG Daily Data:
 const defaultDates = ${JSON.stringify(dates)};
 const defaultSbsleoScores = ${JSON.stringify(sbsleoScores)};
 const defaultFidelityDiff = ${JSON.stringify(fidelityDiff)};
@@ -1245,26 +1245,26 @@ const defaultWeeklyFidelityDiff = ${JSON.stringify(weeklyFidelityDiff)};
 const defaultWeeklyAestheticsDiff = ${JSON.stringify(weeklyAestheticsDiff)};
 const defaultWeeklyConsistencyDiff = ${JSON.stringify(weeklyConsistencyDiff)};
 const defaultProdCategories = ${JSON.stringify(prodCategories)};`;
-            
-            output.textContent = exportData;
-            output.style.display = 'block';
-            
-            // Copy to clipboard
-            navigator.clipboard.writeText(exportData).then(() => {
-                alert('✓ Data exported and copied to clipboard!\n\nEdog entries: ' + dates.length + '\nPROD entries: ' + weeklyDates.length + '\n\nYou can now paste this data and I will update the HTML file.');
-            }).catch(() => {
-                alert('Data exported below. Please copy it manually and send it to me.');
-            });
-        });
 
-        document.getElementById('clearDataBtn').addEventListener('click', function() {
-            if(confirm('⚠️ This will clear all data and reload the page. Continue?')) {
-                console.log('Clearing localStorage...');
-                localStorage.clear();
-                alert('Data cleared! Page will reload.');
-                location.reload();
-            }
-        });
-    </script>
+output.textContent = exportData;
+output.style.display = 'block';
+
+// Copy to clipboard
+navigator.clipboard.writeText(exportData).then(() => {
+alert('✓ Data exported and copied to clipboard!\n\nEdog entries: ' + dates.length + '\nPROD entries: ' + weeklyDates.length + '\n\nYou can now paste this data and I will update the HTML file.');
+}).catch(() => {
+alert('Data exported below. Please copy it manually and send it to me.');
+});
+});
+
+document.getElementById('clearDataBtn').addEventListener('click', function() {
+if(confirm('⚠️ This will clear all data and reload the page. Continue?')) {
+console.log('Clearing localStorage...');
+localStorage.clear();
+alert('Data cleared! Page will reload.');
+location.reload();
+}
+});
+</script>
 </body>
 </html>
